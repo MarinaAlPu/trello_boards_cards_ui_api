@@ -72,7 +72,6 @@ def test_create_card(api_card_client: CardAPI, lists_on_board: dict):
     print("\nколичество карточек в первой колонке")
     print(len(xx))
 
-
     y = api_card_client.create_card(x["list_one_id"], "New card")
     # print(y)
     print("\nновая карточка: id - " + y["id"] + ", " + "name - " + y["name"])
@@ -190,4 +189,3 @@ def test_delete_card(api_card_client: CardAPI, dummy_card_id: str, get_lists_on_
     # print("id третьей карточки: " + resp4[2]["id"] + ", " + "name третьей карточки: " + resp4[2]["name"])
 
     assert len(resp2) - len(resp4) == 1
-

@@ -6,6 +6,7 @@ class BoardAPI:
         self.base_url = base_url
         self.token = token
 
+    @allure.step("Получить все доски организации {org_id}")
     def get_all_boards_by_org_id(self, org_id: str) -> list:
         path = "{trello}/organizations/{id}?boards=open&board_fields=id&board_fields=name&fields=boards".format(trello = self.base_url, id = org_id)
         cookie = {"token": self.token}
@@ -13,7 +14,7 @@ class BoardAPI:
 
         return resp.json().get("boards")
 
-    @allure.step("Создать доску {name}")
+    @allure.step("Создать доску {name}. Количество колонок по умолчанию - три")
     def create_board(self, name: str, default_lists = True) -> dict:
         body = {
                 'defaultLists': default_lists,

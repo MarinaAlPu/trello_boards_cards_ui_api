@@ -14,8 +14,8 @@ class CardAPI:
 
         return resp.json()  
     
-    @allure.step("Добавить карточку в колонке {list_id}: {name}")
-    def create_card(self, list_id: str, name: str) -> dict:#, name: str
+    @allure.step("Добавить карточку {name} в колонке {list_id}")
+    def create_card(self, list_id: str, name: str) -> dict:
         body = {
                 'idList': list_id,
                 'token': self.token
@@ -42,7 +42,7 @@ class CardAPI:
 
         return resp.json()  
 
-    @allure.step("Переместить карточку {card_id} на другой лист")    
+    @allure.step("Переместить карточку {card_id} в другую колонку")    
     def move_one_card(self, card_id: str, list_id: str) -> dict:
         body = {
                 'idList': list_id,

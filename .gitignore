@@ -1,3 +1,4 @@
+.txt
 allure*
 allure-report/
 allure-files/
@@ -433,3 +434,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,python,visualstudiocode,test
+file.txt

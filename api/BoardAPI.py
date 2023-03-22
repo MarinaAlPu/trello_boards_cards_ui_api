@@ -6,12 +6,12 @@ class BoardAPI:
         self.base_url = base_url
         self.token = token
 
-    def get_all_boards_by_org_id(self, org_id: str) -> dict:#list:
+    def get_all_boards_by_org_id(self, org_id: str) -> list:
         path = "{trello}/organizations/{id}?boards=open&board_fields=id&board_fields=name&fields=boards".format(trello = self.base_url, id = org_id)
         cookie = {"token": self.token}
         resp = requests.get(path, cookies = cookie)
 
-        return resp.json()#.get("boards")
+        return resp.json().get("boards")
 
     @allure.step("Создать доску {name}")
     def create_board(self, name: str, default_lists = True) -> dict:
@@ -28,7 +28,7 @@ class BoardAPI:
 
     @allure.step("Удалить доску {id}")    
     def delete_board_by_id(self, id: str) -> dict:
-        cookie = {"token": '6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E'}#self.token}
+        cookie = {"token": self.token}
         path = "{trello}/boards/{board_id}".format(trello = self.base_url, board_id = id)
         resp = requests.delete(path, json = cookie, cookies = cookie)
 
@@ -36,7 +36,7 @@ class BoardAPI:
 
     @allure.step("Получить список колонок на доске {id}")
     def get_lists_by_board_id(self, id: str) -> list:
-        cookie = {"token": '6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E'}#self.token}
+        cookie = {"token": self.token}
         path = "{trello}/boards/{board_id}/lists".format(trello = self.base_url, board_id = id)
         resp = requests.get(path, json = cookie, cookies = cookie)
 

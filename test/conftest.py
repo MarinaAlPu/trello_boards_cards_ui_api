@@ -31,10 +31,14 @@ from testdata.DataProvider import DataProvider
 
 @pytest.fixture
 def api_client() -> BoardAPI:
-    return BoardAPI("https://api.trello.com/1", "6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E")
-    # return BoardAPI(
-    #     ConfigProvider().get("api", "base_url"),
-    #     DataProvider().get_token())
+    # url = ConfigProvider().get("api", "base_url")
+    # DataProvider().get_token()
+    # return BoardAPI(url, DataProvider().get_token())
+    # return BoardAPI("https://api.trello.com/1", "6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E")
+    
+    return BoardAPI(
+        ConfigProvider().get_api_url(),
+        DataProvider().get_token())
 
 @pytest.fixture
 def api_client_no_auth() -> BoardAPI:
@@ -42,7 +46,7 @@ def api_client_no_auth() -> BoardAPI:
 
 @pytest.fixture
 def dummy_board_id(api_client: BoardAPI) -> str:
-    # api = BoardAPI("https://api.trello.com/1", "6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E")
+    # api = BoardAPI(ConfigProvider().get_api_url(), DataProvider().get_token())
 
     # api = BoardAPI(
     #     ConfigProvider().get("api", "base_url"),
@@ -117,10 +121,11 @@ def lists_on_board(api_client: BoardAPI, dummy_board: str) -> dict:
 
 @pytest.fixture
 def api_card_client() -> CardAPI:
-    return CardAPI("https://api.trello.com/1", '6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E')
-    # return CardAPI(
-    #     ConfigProvider().get("api", "base_url"),
-    #     DataProvider().get_token())
+    # url = ConfigProvider().get("api", "base_url")    
+    # return CardAPI(url, '6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E')
+    return CardAPI(
+        ConfigProvider().get("api", "base_url"),
+        DataProvider().get_token())
 
 @pytest.fixture
 def dummy_card_id(api_card_client: CardAPI, lists_on_board: dict) -> str:

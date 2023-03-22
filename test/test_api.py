@@ -5,24 +5,30 @@ from api.CardAPI import CardAPI
 import pytest
 
 # @pytest.mark.skip()
-def test_create_board(api_client: BoardAPI, delete_board: dict):#, test_data: dict
+def test_create_board(api_client: BoardAPI, delete_board: dict, test_data: dict):
     # api = BoardAPI("https://api.trello.com/1", "6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E")
     # board_list = api.get_all_boards_by_org_id("6410e46e85363751e85ab637")#api_client.get_all_boards_by_org_id("6410e46e85363751e85ab637")
 
-    # org_id = test_data.get("org_id")
-    board_list_before = api_client.get_all_boards_by_org_id("6410e46e85363751e85ab637").get("boards")
+    org_id = test_data.get("org_id")
+    print("")
+    print("\nорганизации:")
+    print(org_id)
+
+    board_list_before = api_client.get_all_boards_by_org_id(org_id)
     print("")
     print("\nсписок досок до добавления (id, name):")
     print(board_list_before)
 
     print("\nдобавляется доска:")
     resp = api_client.create_board("New board to be deleted")
-    print("id: " + resp.get("id"))
-    print("name: " + resp.get("name"))
+    print("id:")
+    print(resp.get("id"))
+    print("name:")
+    print(resp.get("name"))
 
     delete_board["board_id"] = resp.get("id")
 
-    board_list_after = api_client.get_all_boards_by_org_id("6410e46e85363751e85ab637").get("boards")
+    board_list_after = api_client.get_all_boards_by_org_id(org_id)
     print("\nсписок досок после добавления (id, name):")
     print(board_list_after)
 
@@ -30,11 +36,11 @@ def test_create_board(api_client: BoardAPI, delete_board: dict):#, test_data: di
         assert len(board_list_after) - len(board_list_before) == 1
 
 # @pytest.mark.skip()
-def test_delete_board(api_client: BoardAPI, dummy_board_id: str):#, test_data: dict):
-    # org_id = test_data.get("org_id")
+def test_delete_board(api_client: BoardAPI, dummy_board_id: str, test_data: dict):
+    org_id = test_data.get("org_id")
     # api = BoardAPI("https://api.trello.com/1", "6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E")
     
-    board_list_before = api_client.get_all_boards_by_org_id("6410e46e85363751e85ab637").get("boards")#api_client.get_all_boards_by_org_id(org_id)
+    board_list_before = api_client.get_all_boards_by_org_id(org_id)
     print("\nсписок досок до удаления (id, name):")
     print(board_list_before)
 
@@ -42,7 +48,7 @@ def test_delete_board(api_client: BoardAPI, dummy_board_id: str):#, test_data: d
     print("\nответ на запрос на удаление доски:")
     print(x)
 
-    board_list_after = api_client.get_all_boards_by_org_id("6410e46e85363751e85ab637").get("boards")#api_client.get_all_boards_by_org_id("6410e46e85363751e85ab637")
+    board_list_after = api_client.get_all_boards_by_org_id(org_id)
     print("\nсписок досок после удаления (id, name):")
     print(board_list_after)
 

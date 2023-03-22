@@ -162,7 +162,7 @@ class BoardAPI:
         return resp.json()
 
     @allure.step("Удалить доску {id}")    
-    def delete_board_by_id(self, id: str):
+    def delete_board_by_id(self, id: str) -> dict:
         cookie = {"token": '6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E'}#self.token}
         path = "{trello}/boards/{board_id}".format(trello = self.base_url, board_id = id)
         resp = requests.delete(path, json = cookie, cookies = cookie)

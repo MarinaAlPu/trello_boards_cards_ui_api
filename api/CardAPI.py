@@ -173,12 +173,20 @@ class CardAPI:
 
     @allure.step("Изменить информацию о карточке {id}")    
     def update_card(self, id: str) -> dict:
-        path = "{trello}/cards/{card_id}?name=Card's new name&desc=We can change card's description!&idList=641a1de8b512da1e59c5892b".format(trello = self.base_url, card_id = id)
+        path = "{trello}/cards/{card_id}?name=Card's new name&desc=We can change card's description!".format(trello = self.base_url, card_id = id)
         cookie = {"token": '6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E'}
         resp = requests.put(path, json = cookie, cookies = cookie)
 
         return resp.json()  
+    
+    # @allure.step("Изменить информацию о карточке {id}")    
+    # def update_card(self, id: str) -> dict:
+    #     path = "{trello}/cards/{card_id}?name=Card's new name&desc=We can change card's description!&idList=641a1de8b512da1e59c5892b".format(trello = self.base_url, card_id = id)
+    #     cookie = {"token": '6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E'}
+    #     resp = requests.put(path, json = cookie, cookies = cookie)
 
+    #     return resp.json()
+    
     @allure.step("Получить информацию о карточке {id}")    
     def get_card_info(self, id: str) -> dict:
         path = "{trello}/cards/{card_id}".format(trello = self.base_url, card_id = id)
@@ -187,6 +195,18 @@ class CardAPI:
 
         return resp.json()  
 
+    @allure.step("Переместить карточку {card_id} на другой лист")    
+    def move_one_card(self, card_id: str, list_id: str) -> dict:
+        body = {
+                'idList': list_id,
+                'token': '6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E'
+        }        
+        path = "{trello}/cards/{card_id}".format(trello = self.base_url, card_id = card_id)
+        cookie = {"token": '6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E'}
+        resp = requests.put(path, json = body, cookies = cookie)
+
+        return resp.json()
+    
     @allure.step("Удалить карточку {id}")    
     def delete_card(self, id: str):
         path = "{trello}/cards/{card_id}".format(trello = self.base_url, card_id = id)
@@ -194,15 +214,3 @@ class CardAPI:
         resp = requests.delete(path, json = cookie, cookies = cookie)
 
         return resp.json()    
-
-    @allure.step("Переместить карточку {id} на другой лист")    
-    def move_one_card(self, id: str) -> dict:
-        body = {
-                'idList': '641a1de8b512da1e59c5892a',
-                'token': '6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E'
-        }        
-        path = "{trello}/cards/{card_id}".format(trello = self.base_url, card_id = id)
-        cookie = {"token": '6410e3061677ca07e152a914/ATTSErkH1NWoupUXCMttfF52OxV36yw7Dl1xyoemvFIOi1msR7kG77Ef8tvonVIO4C7T8387F93E'}
-        resp = requests.put(path, json = body, cookies = cookie)
-
-        return resp.json()

@@ -87,5 +87,5 @@ def test_delete_card(api_card_client: CardAPI, dummy_card_id: str, get_lists_on_
 
     cards_after = api_card_client.get_cards_by_list_id(lists_on_board)
 
-    with allure.step("Проверить, карточек в колонке стало меньше на 1"):
+    with allure.step("Проверить, что карточек в колонке стало меньше на 1"):
         assert len(cards_before) - len(cards_after) == 1

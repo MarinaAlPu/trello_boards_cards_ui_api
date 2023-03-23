@@ -1,5 +1,10 @@
 import allure
 import pytest
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from webdriver_manager.firefox import GeckoDriverManager
 
 from api.BoardAPI import BoardAPI
 from api.CardAPI import CardAPI

@@ -27,8 +27,9 @@ class CardAPI:
         return resp.json()        
 
     @allure.step("Изменить информацию о карточке {id}")    
-    def update_card(self, id: str) -> dict:
-        path = "{trello}/cards/{card_id}?name=Card's new name&desc=We can change card's description!".format(trello = self.base_url, card_id = id)
+    def update_card(self, id: str, card_name: str, card_desc: str) -> dict:
+        path = "{trello}/cards/{card_id}?name={card_new_name}&desc={card_new_description}"\
+                .format(trello = self.base_url, card_id = id, card_new_name = card_name, card_new_description = card_desc)
         cookie = {"token": self.token}
         resp = requests.put(path, json = cookie, cookies = cookie)
 

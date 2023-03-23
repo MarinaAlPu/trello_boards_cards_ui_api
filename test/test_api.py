@@ -51,18 +51,18 @@ def test_create_card(api_card_client: CardAPI, lists_on_board: dict):
             assert lists_on_board["list_one_id"] == new_card_info["idList"]
 
 
-def test_update_card(api_card_client: CardAPI, dummy_card_id: str):
+def test_update_card(api_card_client: CardAPI, dummy_card_id: str, test_data: dict):
     api_card_client.get_card_info(dummy_card_id)
 
-    api_card_client.update_card(dummy_card_id)
+    api_card_client.update_card(dummy_card_id, test_data.get("card_new_name"), test_data.get("card_new_description"))
 
     updated_card_info = api_card_client.get_card_info(dummy_card_id)
 
     with allure.step("Проверить, что данные карточки изменились:"):
         with allure.step("новое название соответствует заданному"):
-            assert updated_card_info["name"] == "Card's new name"
+            assert updated_card_info["name"] == test_data.get("card_new_name")
         with allure.step("новое описание соответствует заданному"):
-            assert updated_card_info["desc"] == "We can change card's description!"
+            assert updated_card_info["desc"] == test_data.get("card_new_description")
 
 
 def test_move_card(api_card_client: CardAPI, dummy_card_id: str, get_lists_on_board_by_dummy_card_id: dict):

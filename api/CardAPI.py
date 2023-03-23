@@ -61,4 +61,4 @@ class CardAPI:
         cookie = {"token": self.token}
         resp = requests.delete(path, json = cookie, cookies = cookie)
 
-        return resp.json()    
+        return resp.json()

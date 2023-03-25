@@ -35,49 +35,52 @@ import pytest
 #         with allure.step("Электронная почта пользователя должна быть: " + email):
 #             assert info[1] == email
 
-# @pytest.mark.skip()
-def create_board_test(browser, auth, test_data: dict):#, api_client_for_ui: ApiForUI
-    # username = test_data.get("username")
-    # email = test_data.get("email")
-    # password = test_data.get("password")
-    board_name = test_data.get("board_name")
-    # org_id =test_data.get("org_id")
 
-    # auth_page = AuthPage(browser)
-    # auth_page.go()
-    # auth_page.login_as(email, password)
+# @pytest.mark.skip()
+def create_board_test(browser, auth_for_create_board, test_data: dict):
+    board_name = test_data.get("board_name")
 
     main_page = MainPage(browser)
     boards_before = main_page.get_boards_before()
-    main_page.create_board(board_name)
-    info = main_page.get_board_info()
+    main_page.create_board_ui(board_name)
+
+    board_page = BoardPage(browser)
+    info = board_page.get_board_info()
     boards_after = main_page.get_boards_after()
 
-    with allure.step("Проверить, что в рабочем пространстве досок стало больше на 1"):
+    with allure.step("Проверить, что в \"Рабочем пространстве Trello\" досок стало больше на 1"):
         assert boards_after - boards_before == 1
 
     with allure.step("Проверить, что название созданной доски: " + board_name):
         assert info == board_name
 
 
-@pytest.mark.skip()
-def delete_board_test(browser, test_data: dict):
-    username = test_data.get("username")
-    email = test_data.get("email")
-    password = test_data.get("password") 
+# @pytest.mark.skip()
+def delete_board_test(browser, auth_for_delete_board):#, test_data: dict
+    # board_name = test_data.get("board_name")
+    # username = test_data.get("username")
+    # email = test_data.get("email")
+    # password = test_data.get("password") 
 
-    auth_page = AuthPage(browser)
-    auth_page.go()
-    auth_page.login_as(email, password)
+    # auth_page = AuthPage(browser)
+    # auth_page.go()
+    # auth_page.login_as(email, password)
 
     main_page = MainPage(browser)
-    main_page.create_board_ui()
-    time.sleep(7)
-
+    # main_page.create_board_ui() # создать доску в фикстуре
+    
+    boards_before = main_page.get_boards_before()
+    main_page.open_board()
+    
     board_page = BoardPage(browser)
     board_page.delete_board_ui()
-    time.sleep(7)    
+
+    boards_after = main_page.get_boards_after()
+
+    with allure.step("Проверить, что в \"Рабочем пространстве Trello\" досок стало меньше на 1"):
+        assert boards_before - boards_after == 1   
       
+
 @pytest.mark.skip()
 def create_card_test(browser, test_data: dict):
     username = test_data.get("username")
@@ -89,7 +92,7 @@ def create_card_test(browser, test_data: dict):
     auth_page.login_as(email, password)
 
     main_page = MainPage(browser)
-    main_page.create_board()
+    main_page.create_board_ui()
     time.sleep(5)
 
     board_page = BoardPage(browser)
@@ -111,7 +114,7 @@ def delete_card_test(browser, test_data: dict):
     auth_page.login_as(email, password)
 
     main_page = MainPage(browser)
-    main_page.create_board()
+    main_page.create_board_ui()
     time.sleep(5)
 
     board_page = BoardPage(browser)
@@ -137,7 +140,7 @@ def update_card_test(browser, test_data: dict):
     auth_page.login_as(email, password)
 
     main_page = MainPage(browser)
-    main_page.create_board()
+    main_page.create_board_ui()
     time.sleep(5)
 
     board_page = BoardPage(browser)
@@ -163,7 +166,7 @@ def move_card_test(browser, test_data: dict):
     auth_page.login_as(email, password)
 
     main_page = MainPage(browser)
-    main_page.create_board()
+    main_page.create_board_ui()
     time.sleep(5)
 
     board_page = BoardPage(browser)

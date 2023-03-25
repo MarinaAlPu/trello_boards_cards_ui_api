@@ -40,7 +40,22 @@ def browser():
         browser.quit()
 
 @pytest.fixture
-def auth(browser, test_data: dict, api_client_for_ui: ApiForUI):
+def auth_for_delete_board(browser, test_data: dict, api_client_for_ui: ApiForUI):
+    email = test_data.get("email")
+    password = test_data.get("password")
+    board_name = test_data.get("board_name")
+
+    auth_page = AuthPage(browser)
+    auth_page.go()
+    auth_page.login_as(email, password)
+
+    api_client_for_ui.create_board(board_name)
+    
+    yield browser
+
+
+@pytest.fixture
+def auth_for_create_board(browser, test_data: dict, api_client_for_ui: ApiForUI):
     email = test_data.get("email")
     password = test_data.get("password")
     org_id =test_data.get("org_id")
@@ -60,7 +75,6 @@ def auth(browser, test_data: dict, api_client_for_ui: ApiForUI):
             api_client_for_ui.delete_board_by_id(board_list[count]["id"])
             count = count + 1
 
-    # BoardPage(browser).delete_board_ui()
 
 @pytest.fixture
 def api_client_for_ui() -> ApiForUI:

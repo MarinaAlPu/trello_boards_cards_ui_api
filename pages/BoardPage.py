@@ -2,6 +2,8 @@ import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 from configuration.ConfigProvider import ConfigProvider
 from testdata.DataProvider import DataProvider
@@ -23,9 +25,11 @@ class BoardPage:
     # def get_current_url(self) -> str:
     #     return self.__driver.current_url
 
+
     # @allure.step("Открыть боковое меню \"УЧЁТНАЯ ЗАПИСЬ\"")
     # def open_menu(self):
     #     self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=header-member-menu-button]").click()        
+
 
     # @allure.step("Прочитать информацию о пользователе")
     # def get_account_info(self) -> list[str]:
@@ -36,41 +40,45 @@ class BoardPage:
 
     #     return [name, email]
     
-    @allure.step("Удалить доску")
+
+    @allure.step("Получить информацию о доске:")
+    def get_board_info(self) -> str:
+        with allure.step("подождать загрузки всех необходимых элементов"):
+            WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "h1")))
+
+        with allure.step("получить название доски"):
+            return self.__driver.find_element(By.CSS_SELECTOR, "h1").text
+
+
+    @allure.step("Удалить доску:")
     def delete_board_ui(self) -> None:
+        with allure.step("подождать загрузки всех необходимых элементов"):
+            WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button[aria-label=Меню]")))
         # нажать кнопку с тремя точками справа
-        self.__driver.find_element(By.CSS_SELECTOR, "button[aria-label=Меню]").click()
-        # time.sleep(5)
-        
-        # нажать кнопку Ещё
-        self.__driver.find_element(By.CSS_SELECTOR, "a.js-open-more").click()
-        # time.sleep(5)
+        with allure.step("нажать кнопку \"Меню\""):
+            self.__driver.find_element(By.CSS_SELECTOR, "button[aria-label=Меню]").click()
 
-        # нажать кнопку Закрыть доску 
-        self.__driver.find_element(By.CSS_SELECTOR, "a.js-close-board").click()
-        # time.sleep(5)
+        with allure.step("нажать кнопку \"Ещё\""):
+            self.__driver.find_element(By.CSS_SELECTOR, "a.js-open-more").click()
 
-        # нажать кнопку Закрыть
-        self.__driver.find_element(By.CSS_SELECTOR, "input[value=Закрыть]").click()
-        # time.sleep(5)
+        with allure.step("нажать кнопку \"Закрыть доску\""):
+            self.__driver.find_element(By.CSS_SELECTOR, "a.js-close-board").click()
 
-        # нажать кнопку Удалить доску навсегда
-        self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=close-board-delete-board-button]").click()
-        # time.sleep(5)
+        with allure.step("нажать кнопку \"Закрыть\""):
+            self.__driver.find_element(By.CSS_SELECTOR, "input[value=Закрыть]").click()
 
-        # нажать кнопку Удалить доску навсегда
-        self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=close-board-delete-board-confirm-button]").click()
-        # time.sleep(5)
+        with allure.step("нажать кнопку \"Удалить доску навсегда\""):
+            self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=close-board-delete-board-button]").click()
+
+        with allure.step("нажать кнопку \"Удалить\""):
+            self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=close-board-delete-board-confirm-button]").click()
+
 
     # @allure.step("Создать колонку")
     # def created_list_ui(self) -> None:
     #     # нажать кнопку с тремя точками справа
     #     self.__driver.find_element(By.CSS_SELECTOR, "button[aria-label=Меню]").click()
     #     time.sleep(7)     
-
-
-
-
 
 
 

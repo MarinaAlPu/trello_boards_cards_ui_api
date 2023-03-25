@@ -15,18 +15,20 @@ class ApiForUI:
 
         return resp.json().get("boards")
 
-    # @allure.step("Создать доску {name}. Количество колонок по умолчанию - три")
-    # def create_board(self, name: str, default_lists = True) -> dict:
-    #     body = {
-    #             'defaultLists': default_lists,
-    #             'name': name,
-    #             'token': self.token
-    #     }
-    #     path = "{trello}/boards".format(trello = self.base_url)
-    #     cookie = {"token": self.token}
-    #     resp = requests.post(path, json = body, cookies = cookie)
 
-    #     return resp.json()
+    @allure.step("Создать доску {name} без колонок")
+    def create_board(self, name: str, default_lists = False) -> dict:
+        body = {
+                'defaultLists': default_lists,
+                'name': name,
+                'token': self.token
+        }
+        path = "{trello}/boards".format(trello = self.base_url)
+        cookie = {"token": self.token}
+        resp = requests.post(path, json = body, cookies = cookie)
+
+        return resp.json()
+
 
     @allure.step("Удалить доску с id {id}")    
     def delete_board_by_id(self, id: str) -> dict:
@@ -35,7 +37,6 @@ class ApiForUI:
         resp = requests.delete(path, json = cookie, cookies = cookie)
 
         return resp.json()
-
 
 
     # @allure.step("Получить список колонок на доске {id}")

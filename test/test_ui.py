@@ -161,5 +161,7 @@ def move_card_test(browser, test_data: dict):
     list_page.create_card()
     time.sleep(5)
 
-
+    list_page = ListPage(browser)
+    list_page.move_card()
+    time.sleep(5)
 

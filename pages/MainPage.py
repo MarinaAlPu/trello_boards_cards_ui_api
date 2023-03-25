@@ -45,7 +45,7 @@ class MainPage:
     # Public (Публичная)
     
     @allure.step("Создать доску")
-    def create_new_board_ui(self) -> None:
+    def create_board(self) -> None:
         # нажать кнопку Создать доску
         self.__driver.find_element(By.CSS_SELECTOR, "li[data-testid=create-board-tile]").click()
         # в поле Заголовок доски ввести название новой доски
@@ -81,6 +81,4 @@ class MainPage:
 
         # удалить доску
         # self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=create-board-submit-button]").click()
-
-
 

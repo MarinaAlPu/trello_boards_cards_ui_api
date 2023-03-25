@@ -18,7 +18,6 @@ class BoardPage:
         self.data = DataProvider()
         url = ConfigProvider().get("ui", "base_url")
         # self.__url = 
-        
 
     # @allure.step("Получить текущий URL")
     # def get_current_url(self) -> str:
@@ -37,33 +36,39 @@ class BoardPage:
 
     #     return [name, email]
     
-
-
     @allure.step("Удалить доску")
-    def delete_created_board_ui(self) -> None:
+    def delete_board_ui(self) -> None:
         # нажать кнопку с тремя точками справа
         self.__driver.find_element(By.CSS_SELECTOR, "button[aria-label=Меню]").click()
-        time.sleep(7)
+        # time.sleep(5)
         
         # нажать кнопку Ещё
         self.__driver.find_element(By.CSS_SELECTOR, "a.js-open-more").click()
-        time.sleep(7)
+        # time.sleep(5)
 
         # нажать кнопку Закрыть доску 
         self.__driver.find_element(By.CSS_SELECTOR, "a.js-close-board").click()
-        time.sleep(7)
+        # time.sleep(5)
 
         # нажать кнопку Закрыть
         self.__driver.find_element(By.CSS_SELECTOR, "input[value=Закрыть]").click()
-        time.sleep(7)
+        # time.sleep(5)
 
         # нажать кнопку Удалить доску навсегда
         self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=close-board-delete-board-button]").click()
-        time.sleep(7)
+        # time.sleep(5)
 
         # нажать кнопку Удалить доску навсегда
         self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=close-board-delete-board-confirm-button]").click()
-        time.sleep(7)
+        # time.sleep(5)
+
+    # @allure.step("Создать колонку")
+    # def created_list_ui(self) -> None:
+    #     # нажать кнопку с тремя точками справа
+    #     self.__driver.find_element(By.CSS_SELECTOR, "button[aria-label=Меню]").click()
+    #     time.sleep(7)     
+
+
 
 
 
@@ -90,3 +95,45 @@ class BoardPage:
     #     # по шаблону - из популярных или посмотреть шаблоны
 
     
+
+# карточка колонки - их 3 шт. - надо взять первую
+# div.js-list-content
+
+    @allure.step("Создать список")   
+    def create_list(self):
+        # ввести название списка
+        self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').click()
+        self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').send_keys("Первый список")
+        # self.__driver.find_element(By.CSS_SELECTOR, 'input[class="list-name-input"]').send_keys("Первый список")
+        # time.sleep(1)
+
+        # нажать кнопку Добавить список
+        self.__driver.find_element(By.CSS_SELECTOR, ".js-save-edit").click() #mod-list-add-button
+        # time.sleep(1)
+
+        # # нажать кнопку ENTER
+        # self.__driver.find_element(By.CSS_SELECTOR, ".js-save-edit").send_keys(Keys.ENTER)
+        # time.sleep(5)
+
+    @allure.step("Создать два списка")   
+    # def create_board(board_name:str, list_names = [])
+    # Реализация:
+    # Создать доску с именем board_name
+    # В цикле пройтись по списку list_names и вызвать создание колонки с каждым именем.
+    # Обратите внимание, что если список пустой, цикл выполнится 0 раз и не будет колонок
+    def create_lists(self):
+        # список названий списков
+        list_names = ["Первый список", "Второй список"]
+        length = len(list_names)
+        counter = 0
+        # ввести название списка
+        while counter <= (length - 1):
+            self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').click()
+            self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').send_keys(list_names[counter])
+            # self.__driver.find_element(By.CSS_SELECTOR, 'input[class="list-name-input"]').send_keys("Первый список")
+            # time.sleep(1)
+
+            # нажать кнопку Добавить список
+            self.__driver.find_element(By.CSS_SELECTOR, ".js-save-edit").click()
+
+            counter = counter + 1

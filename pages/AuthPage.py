@@ -24,15 +24,17 @@ class AuthPage:
     def go(self):
         self.__driver.get(self.__url)
 
-    @allure.step("Авторизоваться под {email}:{password}")
+    @allure.step("Авторизоваться под пользователем {email}: {password}")
     def login_as(self, email: str, password: str):
-        with allure.step("В поле "):
+        with allure.step("В поле \"Укажите адрес электронной почты\" ввести email"):
             self.__driver.find_element(By.CSS_SELECTOR, "#user").send_keys(email)
-        with allure.step("Нажать кнопку "):
+        with allure.step("Нажать кнопку \"Продолжить\""):
             self.__driver.find_element(By.CSS_SELECTOR, "#login").click()
 
-        WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "svg[role=presentation]")))
+        with allure.step("Подождать полной загрузки поля \"Введите пароль\" (отображения иконки с глазом)"):
+            WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "svg[role=presentation]")))
 
-        self.__driver.find_element(By.CSS_SELECTOR, "#password").send_keys(password)
-        self.__driver.find_element(By.CSS_SELECTOR, "#login-submit").click()
-        time.sleep(7)
+        with allure.step("В поле \"Введите пароль\" ввести пароль"):
+            self.__driver.find_element(By.CSS_SELECTOR, "#password").send_keys(password)
+        with allure.step("Нажать кнопку \"Войти\""):
+            self.__driver.find_element(By.CSS_SELECTOR, "#login-submit").click()

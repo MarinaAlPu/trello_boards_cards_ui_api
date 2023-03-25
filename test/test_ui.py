@@ -5,6 +5,8 @@ from pages.BoardPage import BoardPage
 from pages.ListPage import ListPage
 from pages.CardPage import CardPage
 
+from pages.ApiPage import ApiForUI
+
 import time
 
 import pytest
@@ -34,15 +36,16 @@ import pytest
 #             assert info[1] == email
 
 # @pytest.mark.skip()
-def create_board_test(browser, test_data: dict):
+def create_board_test(browser, auth, test_data: dict):#, api_client_for_ui: ApiForUI
     # username = test_data.get("username")
-    email = test_data.get("email")
-    password = test_data.get("password")
+    # email = test_data.get("email")
+    # password = test_data.get("password")
     board_name = test_data.get("board_name")
+    # org_id =test_data.get("org_id")
 
-    auth_page = AuthPage(browser)
-    auth_page.go()
-    auth_page.login_as(email, password)
+    # auth_page = AuthPage(browser)
+    # auth_page.go()
+    # auth_page.login_as(email, password)
 
     main_page = MainPage(browser)
     boards_before = main_page.get_boards_before()

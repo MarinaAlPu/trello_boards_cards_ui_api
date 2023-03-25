@@ -9,43 +9,53 @@ import time
 
 import pytest
 
-@pytest.mark.skip()
-def auth_test(browser, test_data: dict):
-    username = test_data.get("username")
-    email = test_data.get("email")
-    password = test_data.get("password")
+# @pytest.mark.skip()
+# def auth_test(browser, test_data: dict):
+#     username = test_data.get("username")
+#     email = test_data.get("email")
+#     password = test_data.get("password")
 
-    auth_page = AuthPage(browser)
-    auth_page.go()
-    auth_page.login_as(email, password)
+#     auth_page = AuthPage(browser)
+#     auth_page.go()
+#     auth_page.login_as(email, password)
 
-    main_page = MainPage(browser)
-    main_page.open_menu()
-    info = main_page.get_account_info()
+#     main_page = MainPage(browser)
+#     main_page.open_menu()
+#     info = main_page.get_account_info()
 
-    current_url = main_page.get_current_url()
-    with allure.step("Проверить, что URL " + current_url + " заканчивается на kahajow976/boards"):
-        assert current_url.endswith("kahajow976/boards")
+#     current_url = main_page.get_current_url()
+#     with allure.step("Проверить, что URL " + current_url + " заканчивается на kahajow976/boards"):
+#         assert current_url.endswith("kahajow976/boards")
 
-    with allure.step("Проверить, что в меню \"УЧЁТНАЯ ЗАПИСЬ\" указаны данные пользователя:"):
-        with allure.step("Имя пользователя должно быть: " + username):
-            assert info[0] == username
-        with allure.step("Электронная почта пользователя должна быть: " + email):
-            assert info[1] == email
+#     with allure.step("Проверить, что в меню \"УЧЁТНАЯ ЗАПИСЬ\" указаны данные пользователя:"):
+#         with allure.step("Имя пользователя должно быть: " + username):
+#             assert info[0] == username
+#         with allure.step("Электронная почта пользователя должна быть: " + email):
+#             assert info[1] == email
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 def create_board_test(browser, test_data: dict):
-    username = test_data.get("username")
+    # username = test_data.get("username")
     email = test_data.get("email")
     password = test_data.get("password")
+    board_name = test_data.get("board_name")
 
     auth_page = AuthPage(browser)
     auth_page.go()
     auth_page.login_as(email, password)
 
     main_page = MainPage(browser)
-    main_page.create_new_board_ui()
-    time.sleep(13)
+    boards_before = main_page.get_boards_before()
+    main_page.create_board(board_name)
+    info = main_page.get_board_info()
+    boards_after = main_page.get_boards_after()
+
+    with allure.step("Проверить, что в рабочем пространстве досок стало больше на 1"):
+        assert boards_after - boards_before == 1
+
+    with allure.step("Проверить, что название созданной доски: " + board_name):
+        assert info == board_name
+
 
 @pytest.mark.skip()
 def delete_board_test(browser, test_data: dict):
@@ -139,7 +149,7 @@ def update_card_test(browser, test_data: dict):
     card_page.update_card()
     time.sleep(5)
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def move_card_test(browser, test_data: dict):
     username = test_data.get("username")
     email = test_data.get("email")

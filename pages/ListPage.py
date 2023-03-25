@@ -19,11 +19,20 @@ class ListPage:
 
     @allure.step("Создать карточку")
     def create_card(self):
-        # нажать кнопку Добавить карточку
+        # в первой колонке нажать кнопку Добавить карточку
         # self.__driver.find_element(By.CSS_SELECTOR, "a[.js-open-card-composer]").click()
 
-        # рабочий, создаёт карточку в первой колонке, а должен во второй, потому что :last-child
-        self.__driver.find_element(By.CSS_SELECTOR, 'span.js-add-a-card:last-child').click()
+        # рабочий, создаёт карточку в первой колонке
+        # self.__driver.find_element(By.CSS_SELECTOR, 'span.js-add-a-card').click() # вот этот
+        # self.__driver.find_element(By.CSS_SELECTOR, 'span.js-add-a-card:last-child').click()
+
+
+        # self.__driver.find_element(By.XPATH, '/div[@id=board]/div[1]//span[text()="Добавить карточку"]').click()
+        self.__driver.find_element(By.XPATH, '//div[@id="board"]/div[1]/div[last()]//*[text()="Добавить карточку"]').click()
+
+
+
+
 
 
     # @allure.step("Прочитать информацию о пользователе")
@@ -92,7 +101,9 @@ class ListPage:
     #         .perform()
 
     #     assert driver.find_element(By.ID, "drop-status").text == "dropped"
-#Карточка для перетаскивания
+
+# self.__driver.find_element(By.XPATH, '/div[@id="board"]/div[@class="js-list"]/div[last()]/a/span*[text()="Карточка для перетаскивания"]').click()
+
         draggable = self.__driver.find_element(By.XPATH, '//span[text()="Карточка для перетаскивания"]')
         droppable = self.__driver.find_element(By.XPATH, '//textarea[text()="Второй список"]')
         ActionChains(self.__driver)\

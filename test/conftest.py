@@ -22,6 +22,12 @@ from configuration.ConfigProvider import ConfigProvider
 from testdata.DataProvider import DataProvider
 
 @pytest.fixture
+def test_data():
+    with allure.step("Получить тестовые данные"):
+        return DataProvider()
+
+
+@pytest.fixture
 def browser():
     with allure.step("Открыть и настроить браузер"):
         timeout = ConfigProvider().get("ui", "timeout")
@@ -41,20 +47,26 @@ def browser():
 
 
 @pytest.fixture
-def test_data():
-    with allure.step("Получить тестовые данные"):
-        return DataProvider()
-
+def api_client_for_ui() -> ApiForUI:
+    with allure.step("Создать экземпляр класса ApiForUI"):
+        return ApiForUI(
+            ConfigProvider().get_api_url(),
+            DataProvider().get_token())
+    
 
 @pytest.fixture
-def auth_for_delete_board(browser, test_data: dict, api_client_for_ui: ApiForUI):
+def auth_for_ui(browser, test_data: dict, api_client_for_ui: ApiForUI):
     email = test_data.get("email")
     password = test_data.get("password")
-    board_name = test_data.get("board_name")
 
     auth_page = AuthPage(browser)
     auth_page.go()
     auth_page.login_as(email, password)
+
+
+@pytest.fixture
+def auth_for_delete_board(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
+    board_name = test_data.get("board_name")
 
     api_client_for_ui.create_board(board_name)
     
@@ -62,15 +74,9 @@ def auth_for_delete_board(browser, test_data: dict, api_client_for_ui: ApiForUI)
 
 
 @pytest.fixture
-def auth_for_create_board(browser, test_data: dict, api_client_for_ui: ApiForUI):
-    email = test_data.get("email")
-    password = test_data.get("password")
+def auth_for_create_board(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
     org_id =test_data.get("org_id")
     board_name = test_data.get("board_name")
-
-    auth_page = AuthPage(browser)
-    auth_page.go()
-    auth_page.login_as(email, password)
 
     yield
 
@@ -84,23 +90,9 @@ def auth_for_create_board(browser, test_data: dict, api_client_for_ui: ApiForUI)
 
 
 @pytest.fixture
-def api_client_for_ui() -> ApiForUI:
-    with allure.step("Создать экземпляр класса ApiForUI"):
-        return ApiForUI(
-            ConfigProvider().get_api_url(),
-            DataProvider().get_token())
-
-
-@pytest.fixture
-def dummy_board_for_ui(browser, test_data: dict, api_client_for_ui: ApiForUI):
-    email = test_data.get("email")
-    password = test_data.get("password")
+def dummy_board_for_ui(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
     board_name = test_data.get("board_name")
     list_name = test_data.get("list_names")[0]
-
-    auth_page = AuthPage(browser)
-    auth_page.go()
-    auth_page.login_as(email, password)
 
     resp = api_client_for_ui.create_board(board_name).get("id")
 
@@ -111,6 +103,7 @@ def dummy_board_for_ui(browser, test_data: dict, api_client_for_ui: ApiForUI):
 
     with allure.step("Удалить доску после теста"):
         api_client_for_ui.delete_board_by_id(resp)  
+
 
 @pytest.fixture
 def lists_name_on_board_for_ui(api_client_for_ui: ApiForUI, dummy_board_for_ui: str) -> dict:   
@@ -134,19 +127,13 @@ def card_to_delete(browser, dummy_board_for_ui: str, test_data: dict):
     list_page.create_card(card_name)
 
 @pytest.fixture
-def dummy_board_for_moving(browser, test_data: dict, api_client_for_ui: ApiForUI):
-    email = test_data.get("email")
-    password = test_data.get("password")
+def dummy_board_for_moving(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
     board_name = test_data.get("board_name")
     # list_name = test_data.get("list_names")[0]
 
     list_names = test_data.get("list_names")
     length = len(list_names)
     counter = 0
-
-    auth_page = AuthPage(browser)
-    auth_page.go()
-    auth_page.login_as(email, password)
 
     resp = api_client_for_ui.create_board(board_name).get("id")
 
@@ -158,7 +145,7 @@ def dummy_board_for_moving(browser, test_data: dict, api_client_for_ui: ApiForUI
     
     board_page = BoardPage(browser)
 
-    
+
 
     board_page.create_lists_for_moving(test_data)
 
@@ -212,6 +199,7 @@ def dummy_board(api_client: BoardAPI) -> str:
     with allure.step("Удалить доску после теста"):
         api_client.delete_board_by_id(resp)    
 
+
 @pytest.fixture
 def lists_on_board(api_client: BoardAPI, dummy_board: str) -> dict:   
     lists_on_board = api_client.get_lists_by_board_id(dummy_board)
@@ -242,6 +230,7 @@ def dummy_card_id(api_card_client: CardAPI, lists_on_board: dict) -> str:
         resp = api_card_client.create_card(list_one_id, "Card to be update and deleted").get("id")
 
         return resp
+
 
 @pytest.fixture
 def get_lists_on_board_by_dummy_card_id(api_client: BoardAPI, api_card_client: CardAPI, dummy_card_id: str) -> dict:

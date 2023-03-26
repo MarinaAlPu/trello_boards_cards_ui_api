@@ -5,8 +5,6 @@ from pages.BoardPage import BoardPage
 from pages.ListPage import ListPage
 from pages.CardPage import CardPage
 
-from pages.ApiPage import ApiForUI
-
 import time
 
 import pytest

@@ -36,7 +36,7 @@ import pytest
 #             assert info[1] == email
 
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 def create_board_test(browser, auth_for_create_board, test_data: dict):
     board_name = test_data.get("board_name")
 
@@ -55,7 +55,7 @@ def create_board_test(browser, auth_for_create_board, test_data: dict):
         assert info == board_name
 
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 def delete_board_test(browser, auth_for_delete_board):#, test_data: dict
     # board_name = test_data.get("board_name")
     main_page = MainPage(browser)
@@ -71,7 +71,7 @@ def delete_board_test(browser, auth_for_delete_board):#, test_data: dict
         assert boards_before - boards_after == 1   
       
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 def create_card_test(browser, dummy_board_for_ui: str, test_data: dict):
     card_name = test_data.get("card_name")
 
@@ -83,7 +83,7 @@ def create_card_test(browser, dummy_board_for_ui: str, test_data: dict):
         cards_on_list_after = list_page.get_cards_on_list()
 
     card_page = CardPage(browser)    
-    new_card_name = card_page.get_card_info()
+    new_card_name = card_page.get_card_name()
 
     with allure.step("Проверить, что карточка создалась:"):
         with allure.step("количество карточек стало больше на 1"):
@@ -92,7 +92,7 @@ def create_card_test(browser, dummy_board_for_ui: str, test_data: dict):
             assert new_card_name == card_name   
 
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 def delete_card_test(browser, card_to_delete):
     list_page = ListPage(browser)
     with allure.step("Посчитать количество карточек в колонке ДО удаления карточки"):
@@ -109,7 +109,7 @@ def delete_card_test(browser, card_to_delete):
             assert len(cards_on_list_before) - len(cards_on_list_after) == 1
 
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def update_card_test(browser, test_data: dict, card_to_delete):
     new_name = test_data.get("new_data")["card_new_name"]
     print("\nновое имя: ")

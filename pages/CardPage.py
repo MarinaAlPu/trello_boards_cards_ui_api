@@ -20,6 +20,11 @@ class CardPage:
         # self.__url = 
 
 
+    @allure.step("Получить данные карточки:")
+    def get_card_name(self):
+        return self.__driver.find_element(By.CSS_SELECTOR, ".js-card-details").text  
+
+
     @allure.step("Получить данные карточки ДО изменения информации:")
     def get_card_info_before_update(self):
         with allure.step("подождать загрузки всех необходимых элементов"):

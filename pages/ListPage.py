@@ -24,7 +24,7 @@ class ListPage:
 
 
     @allure.step("Создать карточку")
-    def create_card(self, name:str):
+    def create_card(self, name: str):
         with allure.step("нажать кнопку \"Добавить карточку\""):
             self.__driver.find_element(By.XPATH, '//div[@id="board"]/div[1]/div[last()]//*[text()="Добавить карточку"]').click()
 

@@ -92,7 +92,7 @@ def api_client_for_ui() -> ApiForUI:
 
 
 @pytest.fixture
-def dummy_board_for_ui(browser,test_data: dict, api_client_for_ui: ApiForUI):
+def dummy_board_for_ui(browser, test_data: dict, api_client_for_ui: ApiForUI):
     email = test_data.get("email")
     password = test_data.get("password")
     board_name = test_data.get("board_name")
@@ -127,9 +127,11 @@ def lists_name_on_board_for_ui(api_client_for_ui: ApiForUI, dummy_board_for_ui: 
         yield lists
 
 
-
-
-
+@pytest.fixture
+def card_to_delete(browser, dummy_board_for_ui: str, test_data: dict):
+    card_name = test_data.get("card_name")
+    list_page = ListPage(browser)
+    list_page.create_card(card_name)
 
 
 @pytest.fixture

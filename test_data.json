@@ -6,7 +6,7 @@
     "org_id": "6410e46e85363751e85ab637",
     "board_name": "New board",
     "list_names": ["First list", "Second list"],
-    "card_name": "First card",
+    "card_name": "New card",
     "card_new_name": "Card's new name",
     "card_new_description": "We can change card's description!"
 }

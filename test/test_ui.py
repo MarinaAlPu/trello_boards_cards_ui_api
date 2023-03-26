@@ -71,7 +71,7 @@ def delete_board_test(browser, auth_for_delete_board):#, test_data: dict
         assert boards_before - boards_after == 1   
       
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def create_card_test(browser, dummy_board_for_ui: str, test_data: dict):
     card_name = test_data.get("card_name")
 
@@ -92,31 +92,23 @@ def create_card_test(browser, dummy_board_for_ui: str, test_data: dict):
             assert new_card_name == card_name   
 
 
-@pytest.mark.skip()
-def delete_card_test(browser, test_data: dict):
-    username = test_data.get("username")
-    email = test_data.get("email")
-    password = test_data.get("password") 
-
-    auth_page = AuthPage(browser)
-    auth_page.go()
-    auth_page.login_as(email, password)
-
-    main_page = MainPage(browser)
-    main_page.create_board_ui()
-    time.sleep(5)
-
-    board_page = BoardPage(browser)
-    board_page.create_list()
-    time.sleep(5)   
-
+# @pytest.mark.skip()
+def delete_card_test(browser, card_to_delete):
     list_page = ListPage(browser)
-    list_page.create_card()
-    time.sleep(5) 
+    with allure.step("Посчитать количество карточек в колонке ДО удалени карточки"):
+        cards_on_list_before = list_page.get_cards_on_list()
 
     card_page = CardPage(browser)
-    card_page.delete_card()
-    time.sleep(5) 
+    with allure.step("Удалить карточку"):
+        card_page.delete_card()
+
+    with allure.step("Посчитать количество карточек в колонке ПОСЛЕ удаления карточки"):
+        cards_on_list_after = list_page.get_cards_on_list()
+
+    with allure.step("Проверить, что карточка удалилась:"):
+        with allure.step("количество карточек стало меньше на 1"):
+            assert len(cards_on_list_before) - len(cards_on_list_after) == 1
+
 
 @pytest.mark.skip()
 def update_card_test(browser, test_data: dict):

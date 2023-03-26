@@ -1,18 +1,11 @@
 import allure
 from selenium.webdriver.common.by import By
-# from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webdriver import WebDriver
-import time
-# from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from configuration.ConfigProvider import ConfigProvider
 
-import pytest
-
-@pytest.mark.skip()
 class AuthPage:
 
     def __init__(self, driver: WebDriver) -> None:

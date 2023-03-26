@@ -7,11 +7,6 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from configuration.ConfigProvider import ConfigProvider
 from testdata.DataProvider import DataProvider
-# from pages.BoardPage import BoardPage
-# from pages.ListPage import ListPage
-# from pages.CardPage import CardPage
-
-import time
 
 class MainPage:
 
@@ -63,6 +58,6 @@ class MainPage:
             self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=create-board-submit-button]").click()
 
 
-    @allure.step("Открыть доску")# {name}   
+    @allure.step("Открыть доску")# {name} # переменную в селектор???????????
     def open_board(self):#, name: str
         self.__driver.find_element(By.CSS_SELECTOR, 'div[title="New board"]').click()

@@ -7,9 +7,6 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from configuration.ConfigProvider import ConfigProvider
 from testdata.DataProvider import DataProvider
-# from pages.MainPage import MainPage
-# from pages.ListPage import ListPage
-# from pages.CardPage import CardPage
 
 import time
 
@@ -87,7 +84,7 @@ class BoardPage:
 
         with allure.step("ввести название списка в поле \"Ввести заголовок списка\""):
             self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').send_keys(name)
-            
+
         with allure.step("нажать кнопку \"Добавить список\""):
             self.__driver.find_element(By.CSS_SELECTOR, ".js-save-edit").click()
 
@@ -109,12 +106,15 @@ class BoardPage:
         counter = 0
         # ввести название списка
         while counter <= (length - 1):
-            self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').click()
-            self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').send_keys(list_names[counter])
+            with allure.step("нажать кнопку \"Добавить список\""):
+                self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').click()
+
+            with allure.step("ввести название списка в поле \"Ввести заголовок списка\" {list_names[counter]}"):
+                self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').send_keys(list_names[counter])
             # self.__driver.find_element(By.CSS_SELECTOR, 'input[class="list-name-input"]').send_keys("Первый список")
             # time.sleep(1)
 
-            # нажать кнопку Добавить список
-            self.__driver.find_element(By.CSS_SELECTOR, ".js-save-edit").click()
+            with allure.step("нажать кнопку \"Добавить список\""):        
+                self.__driver.find_element(By.CSS_SELECTOR, ".js-save-edit").click()
 
-            counter = counter + 1
+                counter = counter + 1

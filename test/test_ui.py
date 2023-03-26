@@ -92,73 +92,111 @@ def create_card_test(browser, dummy_board_for_ui: str, test_data: dict):
             assert new_card_name == card_name   
 
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def delete_card_test(browser, card_to_delete):
     list_page = ListPage(browser)
-    with allure.step("Посчитать количество карточек в колонке ДО удалени карточки"):
+    with allure.step("Посчитать количество карточек в колонке ДО удаления карточки"):
         cards_on_list_before = list_page.get_cards_on_list()
 
     card_page = CardPage(browser)
-    with allure.step("Удалить карточку"):
-        card_page.delete_card()
+    card_page.delete_card()
 
     with allure.step("Посчитать количество карточек в колонке ПОСЛЕ удаления карточки"):
         cards_on_list_after = list_page.get_cards_on_list()
 
     with allure.step("Проверить, что карточка удалилась:"):
-        with allure.step("количество карточек стало меньше на 1"):
+        with allure.step("количество карточек в колонке стало меньше на 1"):
             assert len(cards_on_list_before) - len(cards_on_list_after) == 1
 
 
-@pytest.mark.skip()
-def update_card_test(browser, test_data: dict):
-    username = test_data.get("username")
-    email = test_data.get("email")
-    password = test_data.get("password") 
+# @pytest.mark.skip()
+def update_card_test(browser, test_data: dict, card_to_delete):
+    new_name = test_data.get("new_data")["card_new_name"]
+    print("\nновое имя: ")
+    print(new_name)
+    new_description = test_data.get("new_data")["card_new_description"]
+    print("\nновое описание: ")
+    print(new_description)
+    # username = test_data.get("username")
+    # email = test_data.get("email")
+    # password = test_data.get("password")
 
-    auth_page = AuthPage(browser)
-    auth_page.go()
-    auth_page.login_as(email, password)
+    # auth_page = AuthPage(browser)
+    # auth_page.go()
+    # auth_page.login_as(email, password)
 
-    main_page = MainPage(browser)
-    main_page.create_board_ui()
-    time.sleep(5)
+    # main_page = MainPage(browser)
+    # main_page.create_board_ui()
+    # time.sleep(5)
 
-    board_page = BoardPage(browser)
-    board_page.create_list()
-    time.sleep(5)
+    # board_page = BoardPage(browser)
+    # board_page.create_list()
+    # time.sleep(5)
 
-    list_page = ListPage(browser)
-    list_page.create_card()
-    time.sleep(5)
+    # list_page = ListPage(browser)
+    # list_page.create_card()
+    # time.sleep(5)
 
     card_page = CardPage(browser)
-    card_page.update_card()
+    card_info_before = card_page.get_card_info_before_update()
+    card_name_before = card_info_before.get("name")
+    print("\nимя карточки до изменения: ")
+    print(card_name_before)
+    card_description_before = card_info_before.get("description")
+    print("\nописание карточки до изменения: ")
+    print(card_description_before)
+
+    card_page.update_card()#new_name, new_description # не хочет сотрудничать
+
+    card_name_after = card_page.get_card_info_after_update().get("name")
+    print("\nимя карточки после изменения: ")
+    print(card_name_after)
+    card_description_after = card_page.get_card_info_after_update().get("description")
+    print("\nописание карточки до изменения: ")
+    print(card_description_after)
     time.sleep(5)
+    with allure.step("Проверить, что данные карточки изменились:"):
+        with allure.step("новое имя карточки: {new_name}"):
+            assert card_name_after == new_name
+        with allure.step("новое описание карточки: {new_description}"):
+            assert card_description_after == new_description   
+
+    time.sleep(5)
+
 
 @pytest.mark.skip()
-def move_card_test(browser, test_data: dict):
-    username = test_data.get("username")
-    email = test_data.get("email")
-    password = test_data.get("password") 
+def move_card_test(browser, test_data: dict, dummy_board_for_moving):
+    list_names = test_data.get("list_names")
+    # username = test_data.get("username")
+    # email = test_data.get("email")
+    # password = test_data.get("password") 
 
-    auth_page = AuthPage(browser)
-    auth_page.go()
-    auth_page.login_as(email, password)
+    # auth_page = AuthPage(browser)
+    # auth_page.go()
+    # auth_page.login_as(email, password)
 
-    main_page = MainPage(browser)
-    main_page.create_board_ui()
-    time.sleep(5)
+    # main_page = MainPage(browser)
+    # main_page.create_board_ui()
+    # time.sleep(5)
 
-    board_page = BoardPage(browser)
-    board_page.create_lists_for_moving()
-    time.sleep(5)
-
-    list_page = ListPage(browser)
-    list_page.create_card()
-    time.sleep(5)
+    # board_page = BoardPage(browser)
+    # board_page.create_lists_for_moving()
+    # time.sleep(5)
 
     list_page = ListPage(browser)
+    # list_page.create_card()
+    # time.sleep(5)
+
+    card_page = CardPage(browser)
+# получить список карточки ДО перемещения
+    list_of_card_before = card_page.get_list_of_card()
+
     list_page.move_card()
-    time.sleep(5)
 
+# получить список карточки ПОСЛЕ перемещения
+    list_of_card_after = card_page.get_list_of_card()
+
+    with allure.step("Проверить, что название колонки, в которой находится карточка, изменилось"):
+        assert list_of_card_after != list_of_card_before
+        
+        time.sleep(5)

@@ -7,6 +7,8 @@
     "board_name": "New board",
     "list_names": ["First list", "Second list"],
     "card_name": "New card",
-    "card_new_name": "Card's new name",
-    "card_new_description": "We can change card's description!"
+    "new_data": {
+      "card_new_name": "Card's new name",
+      "card_new_description": "We can change card's description!"  
+    }
 }

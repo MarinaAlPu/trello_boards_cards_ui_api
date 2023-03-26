@@ -60,12 +60,12 @@ class ListPage:
 
 # self.__driver.find_element(By.XPATH, '/div[@id="board"]/div[@class="js-list"]/div[last()]/a/span*[text()="Карточка для перетаскивания"]').click()
 
-        draggable = self.__driver.find_element(By.XPATH, '//span[text()="Карточка для перетаскивания"]')
+        draggable = self.__driver.find_element(By.XPATH, '//span[text()="New card"]')
         # find_serial_number = browser.find_element_by_xpath('.//span[text()=" + ПЕРЕМЕННАЯ + ")]')
 
         # find_serial_number = browser.find_element_by_xpath(".//*[contains(text(),'sn-" + serialNumber + "')]")
 
         # find_serial_number = browser.find_element_by_xpath('.//textarea[text()=" + ПЕРЕМЕННАЯ + ")]')
-        droppable = self.__driver.find_element(By.XPATH, '//textarea[text()="Второй список"]')
+        droppable = self.__driver.find_element(By.XPATH, '//textarea[text()="Second list"]')
         ActionChains(self.__driver).drag_and_drop(draggable, droppable).perform()    
         

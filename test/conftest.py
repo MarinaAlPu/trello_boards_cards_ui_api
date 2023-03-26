@@ -133,6 +133,43 @@ def card_to_delete(browser, dummy_board_for_ui: str, test_data: dict):
     list_page = ListPage(browser)
     list_page.create_card(card_name)
 
+@pytest.fixture
+def dummy_board_for_moving(browser, test_data: dict, api_client_for_ui: ApiForUI):
+    email = test_data.get("email")
+    password = test_data.get("password")
+    board_name = test_data.get("board_name")
+    # list_name = test_data.get("list_names")[0]
+
+    list_names = test_data.get("list_names")
+    length = len(list_names)
+    counter = 0
+
+    auth_page = AuthPage(browser)
+    auth_page.go()
+    auth_page.login_as(email, password)
+
+    resp = api_client_for_ui.create_board(board_name).get("id")
+
+    # def create_board(board_name:str, list_names = [])
+    # Реализация:
+    # Создать доску с именем board_name
+    # В цикле пройтись по списку list_names и вызвать создание колонки с каждым именем.
+    # Обратите внимание, что если список пустой, цикл выполнится 0 раз и не будет колонок
+    
+    board_page = BoardPage(browser)
+
+    
+
+    board_page.create_lists_for_moving(test_data)
+
+    list_page = ListPage(browser)
+    list_page.create_card()
+
+    yield browser
+
+    with allure.step("Удалить доску после теста"):
+        api_client_for_ui.delete_board_by_id(resp) 
+
 
 @pytest.fixture
 def api_client() -> BoardAPI:

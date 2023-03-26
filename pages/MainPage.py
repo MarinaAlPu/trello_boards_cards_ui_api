@@ -32,7 +32,7 @@ class MainPage:
     #     self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=header-member-menu-button]").click()        
 
 
-    @allure.step("Посчитать количество досок в Рабочем пространстве Trello до добавления новой доски:")
+    @allure.step("Посчитать количество досок в Рабочем пространстве Trello ДО добавления новой доски:")
     def get_boards_before(self) -> list[str]:
         with allure.step("подождать загрузки всех необходимых элементов"):
             WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.board-tile-details-name")))
@@ -41,7 +41,7 @@ class MainPage:
             fields = self.__driver.find_elements(By.CSS_SELECTOR, "div.board-tile-details-name")
             return len(fields)
 
-    @allure.step("Посчитать количество досок в Рабочем пространстве Trello после добавления новой доски:")
+    @allure.step("Посчитать количество досок в Рабочем пространстве Trello ПОСЛЕ добавления новой доски:")
     def get_boards_after(self) -> list[str]:
         with allure.step("нажать кнопку \"Рабочее простанство Trello\" и перейти в Рабочее простанство Trello"):
             self.__driver.find_element(By.XPATH, '//p[text()="Рабочее пространство Trello"]').click()
@@ -51,19 +51,13 @@ class MainPage:
             return len(fields)
 
 
-    # ТРИ (четыре?) варианта видимости (уровень конфиденциальности) рабочего пространства 
-    # Workspace Visible (Для рабочего пространства)
-    # Private (Приватная)
-    # Public (Публичная)
-    
-    
-    @allure.step("Создать доску:")
+    @allure.step("Создать доску {board_name}:")
     def create_board_ui(self, board_name: str) -> None:
         with allure.step("нажать кнопку \"Создать доску\""):
             self.__driver.find_element(By.CSS_SELECTOR, "li[data-testid=create-board-tile]").click()
 
         with allure.step("ввести название доски в поле \"Заголовок доски\""):
-            self.__driver.find_element(By.CSS_SELECTOR, "input[data-testid=create-board-title-input]").send_keys(board_name) # унести название доски в переменную в test_data
+            self.__driver.find_element(By.CSS_SELECTOR, "input[data-testid=create-board-title-input]").send_keys(board_name) 
 
         with allure.step("нажать кнопку \"Создать\""):
             self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=create-board-submit-button]").click()
@@ -72,5 +66,3 @@ class MainPage:
     @allure.step("Открыть доску")# {name}   
     def open_board(self):#, name: str
         self.__driver.find_element(By.CSS_SELECTOR, 'div[title="New board"]').click()
-
-

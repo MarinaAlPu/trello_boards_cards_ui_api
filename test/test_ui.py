@@ -36,7 +36,7 @@ import pytest
 #             assert info[1] == email
 
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def create_board_test(browser, auth_for_create_board, test_data: dict):
     board_name = test_data.get("board_name")
 
@@ -55,20 +55,10 @@ def create_board_test(browser, auth_for_create_board, test_data: dict):
         assert info == board_name
 
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def delete_board_test(browser, auth_for_delete_board):#, test_data: dict
     # board_name = test_data.get("board_name")
-    # username = test_data.get("username")
-    # email = test_data.get("email")
-    # password = test_data.get("password") 
-
-    # auth_page = AuthPage(browser)
-    # auth_page.go()
-    # auth_page.login_as(email, password)
-
     main_page = MainPage(browser)
-    # main_page.create_board_ui() # создать доску в фикстуре
-    
     boards_before = main_page.get_boards_before()
     main_page.open_board()
     
@@ -81,27 +71,26 @@ def delete_board_test(browser, auth_for_delete_board):#, test_data: dict
         assert boards_before - boards_after == 1   
       
 
-@pytest.mark.skip()
-def create_card_test(browser, test_data: dict):
-    username = test_data.get("username")
-    email = test_data.get("email")
-    password = test_data.get("password") 
-
-    auth_page = AuthPage(browser)
-    auth_page.go()
-    auth_page.login_as(email, password)
-
-    main_page = MainPage(browser)
-    main_page.create_board_ui()
-    time.sleep(5)
-
-    board_page = BoardPage(browser)
-    board_page.create_list()
-    time.sleep(5)   
+# @pytest.mark.skip()
+def create_card_test(browser, dummy_board_for_ui: str, test_data: dict):
+    card_name = test_data.get("card_name")
 
     list_page = ListPage(browser)
-    list_page.create_card()
-    time.sleep(5)   
+    with allure.step("Посчитать количество карточек в колонке ДО добавления новой карточки"):
+        cards_on_list_before = list_page.get_cards_on_list()
+    list_page.create_card(card_name)
+    with allure.step("Посчитать количество карточек в колонке ПОСЛЕ добавления новой карточки"):
+        cards_on_list_after = list_page.get_cards_on_list()
+
+    card_page = CardPage(browser)    
+    new_card_name = card_page.get_card_info()
+
+    with allure.step("Проверить, что карточка создалась:"):
+        with allure.step("количество карточек стало больше на 1"):
+            assert len(cards_on_list_after) - len(cards_on_list_before) == 1
+        with allure.step("название новой карточки совпадает с заданным названием"):
+            assert new_card_name == card_name   
+
 
 @pytest.mark.skip()
 def delete_card_test(browser, test_data: dict):
@@ -170,7 +159,7 @@ def move_card_test(browser, test_data: dict):
     time.sleep(5)
 
     board_page = BoardPage(browser)
-    board_page.create_lists()
+    board_page.create_lists_for_moving()
     time.sleep(5)
 
     list_page = ListPage(browser)

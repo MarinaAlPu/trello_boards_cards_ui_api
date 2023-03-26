@@ -19,7 +19,15 @@ class CardPage:
         url = ConfigProvider().get("ui", "base_url")
         # self.__url = 
 
-    @allure.step("Изменить данные карточки")
+    @allure.step("Получить данные карточки:")
+    def get_card_info(self):
+        # нажать на карточку
+        # with allure.step("нажать на карточку"):
+            # self.__driver.find_element(By.CSS_SELECTOR, "input[class='js-card-details']").click()
+        return self.__driver.find_element(By.CSS_SELECTOR, ".js-card-details").text     
+
+
+    @allure.step("Изменить данные карточки:")
     def update_card(self):
         # нажать на карточку
         # self.__driver.find_element(By.CSS_SELECTOR, "input[class='js-card-details']").click()
@@ -57,7 +65,8 @@ class CardPage:
         self.__driver.find_element(By.CSS_SELECTOR, 'input[value=Сохранить]:first-child').click()
         time.sleep(3)
 
-    @allure.step("Удалить карточку")
+
+    @allure.step("Удалить карточку:")
     def delete_card(self):
         # # нажать кнопку Добавить карточку
         # # self.__driver.find_element(By.CSS_SELECTOR, "a[.js-open-card-composer]").click()

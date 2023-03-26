@@ -17,66 +17,22 @@ class ListPage:
         url = ConfigProvider().get("ui", "base_url")
         # self.__url = 
 
+
+    def get_cards_on_list(self):
+        cards = self.__driver.find_elements(By.CSS_SELECTOR, ".js-card-details")
+        return cards
+
+
     @allure.step("Создать карточку")
-    def create_card(self):
-        # в первой колонке нажать кнопку Добавить карточку
-        # self.__driver.find_element(By.CSS_SELECTOR, "a[.js-open-card-composer]").click()
+    def create_card(self, name:str):
+        with allure.step("нажать кнопку \"Добавить карточку\""):
+            self.__driver.find_element(By.XPATH, '//div[@id="board"]/div[1]/div[last()]//*[text()="Добавить карточку"]').click()
 
-        # рабочий, создаёт карточку в первой колонке
-        # self.__driver.find_element(By.CSS_SELECTOR, 'span.js-add-a-card').click() # вот этот
-        # self.__driver.find_element(By.CSS_SELECTOR, 'span.js-add-a-card:last-child').click()
+        with allure.step("в поле \"Ввести заголовок для этой карточки\" ввести название карточки"):
+            self.__driver.find_element(By.CSS_SELECTOR, "textarea[placeholder=\"Ввести заголовок для этой карточки\"]").send_keys(name)
 
-
-        # self.__driver.find_element(By.XPATH, '/div[@id=board]/div[1]//span[text()="Добавить карточку"]').click()
-        self.__driver.find_element(By.XPATH, '//div[@id="board"]/div[1]/div[last()]//*[text()="Добавить карточку"]').click()
-
-
-
-
-
-
-    # @allure.step("Прочитать информацию о пользователе")
-    # def get_account_info(self) -> list[str]:
-    #     container = self.__driver.find_element(By.CSS_SELECTOR, "div[data-testid=account-menu]>div>div:last-child")
-    #     fields = container.find_elements(By.CSS_SELECTOR, "div")
-    #     name = fields[0].text
-    #     email = fields[1].text
-    #     return [name, email]
-
-
-# div id=board
-#   div class=js-list (2 штуки - по числу списков)
-#       div -
-#       div -
-#       div class=card-composer-container
-#          a
-#             span class=js-add-a-card
-
-        # self.__driver.find_element(By.CSS_SELECTOR, '#board:first-child:last-child/a/span[class=js-add-a-card]').click()
-
-        # self.__driver.find_element(By.XPATH, '//[@id=board]:first-child/following-sibling::*[contains(text(), "Добавить карточку")]').click()
-        
-        # self.__driver.find_element(By.XPATH, '#board:first-child//span').click()
-
-
-        # self.__driver.find_elements(By.CSS_SELECTOR, 'span[class="js-add-a-card"]:first-child')
-        # self.__driver.find_element(By.CSS_SELECTOR, "input[value=Добавить карточку]").click()
-        # self.__driver.find_element(By.CSS_SELECTOR, "input[.js-card-details]").click()
-        # time.sleep(5)
-
-        # в поле "Ввести заголовок для этой карточки" ввести название карточки
-        # self.__driver.find_element(By.CSS_SELECTOR, ".list-card-details").send_keys("Новая карточка")
-        self.__driver.find_element(By.CSS_SELECTOR, "textarea[placeholder=\"Ввести заголовок для этой карточки\"]").send_keys("Карточка для перетаскивания")
-        # self.__driver.find_element(By.CSS_SELECTOR, "textarea[.js-card-title]").click()
-        # time.sleep(5)
-
-        # # кликнуть в свободное место на поле доски
-        # self.__driver.find_element(By.CSS_SELECTOR, "#board").click()
-        # time.sleep(5)
-
-        # нажать кнопку ENTER
-        self.__driver.find_element(By.CSS_SELECTOR, "textarea[placeholder=\"Ввести заголовок для этой карточки\"]").send_keys(Keys.ENTER)
-        # time.sleep(5)
+        with allure.step("нажать кнопку ENTER"):
+            self.__driver.find_element(By.CSS_SELECTOR, "textarea[placeholder=\"Ввести заголовок для этой карточки\"]").send_keys(Keys.ENTER)
 
 
     @allure.step("Перенести карточку в другую колонку")
@@ -105,8 +61,11 @@ class ListPage:
 # self.__driver.find_element(By.XPATH, '/div[@id="board"]/div[@class="js-list"]/div[last()]/a/span*[text()="Карточка для перетаскивания"]').click()
 
         draggable = self.__driver.find_element(By.XPATH, '//span[text()="Карточка для перетаскивания"]')
+        # find_serial_number = browser.find_element_by_xpath('.//span[text()=" + ПЕРЕМЕННАЯ + ")]')
+
+        # find_serial_number = browser.find_element_by_xpath(".//*[contains(text(),'sn-" + serialNumber + "')]")
+
+        # find_serial_number = browser.find_element_by_xpath('.//textarea[text()=" + ПЕРЕМЕННАЯ + ")]')
         droppable = self.__driver.find_element(By.XPATH, '//textarea[text()="Второй список"]')
-        ActionChains(self.__driver)\
-            .drag_and_drop(draggable, droppable)\
-            .perform()    
+        ActionChains(self.__driver).drag_and_drop(draggable, droppable).perform()    
         

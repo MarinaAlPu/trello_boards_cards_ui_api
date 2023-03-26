@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from configuration.ConfigProvider import ConfigProvider
 from testdata.DataProvider import DataProvider
-from pages.MainPage import MainPage
+# from pages.MainPage import MainPage
 # from pages.ListPage import ListPage
 # from pages.CardPage import CardPage
 
@@ -74,64 +74,37 @@ class BoardPage:
             self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=close-board-delete-board-confirm-button]").click()
 
 
-    # @allure.step("Создать колонку")
-    # def created_list_ui(self) -> None:
-    #     # нажать кнопку с тремя точками справа
-    #     self.__driver.find_element(By.CSS_SELECTOR, "button[aria-label=Меню]").click()
-    #     time.sleep(7)     
+    @allure.step("Создать список {name}:")
+    def create_list_ui(self, name: str):
+        # with allure.step("подождать загрузки всех необходимых элементов"):
+        #     WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'div[title="New board"]')))
 
+        with allure.step("открыть доску"):
+            self.__driver.find_element(By.CSS_SELECTOR, 'div[title="New board"]').click()
 
+        with allure.step("нажать кнопку \"Добавить список\""):
+            self.__driver.find_element(By.CSS_SELECTOR, '.js-open-add-list').click()
 
-
-    # # ТРИ (четыре?) варианта видимости (уровень конфиденциальности) рабочего пространства 
-    # # Workspace Visible (Для рабочего пространства)
-    # # Private (Приватная)
-    # # Public (Публичная)
-    # # 
-    # def create_board(self):
-    #     # нажать кнопку Создать доску
-    #     self.__driver.find_element(By.CSS_SELECTOR, "li[data-testid=create-board-tile]").click()
-    #     # в поле Заголовок доски ввести название новой доски
-    #     self.__driver.find_element(By.CSS_SELECTOR, "input[data-testid=create-board-title-input]").send_keys("One more board")
-    #     # выбрать уровень конфиденциальности доски (три штуки)
-
-
-    #     # выбрать фон доски из видимых или из трёх точек, фото или цвет
-                
-
-    #     # создать или сделать по шаблону
-    #     # по шаблону - из популярных или посмотреть шаблоны
-
-    
-
-# карточка колонки - их 3 шт. - надо взять первую
-# div.js-list-content
-
-    @allure.step("Создать список")   
-    def create_list(self):
-        # ввести название списка
-        self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').click()
-        self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').send_keys("Первый список")
-        # self.__driver.find_element(By.CSS_SELECTOR, 'input[class="list-name-input"]').send_keys("Первый список")
-        # time.sleep(1)
-
-        # нажать кнопку Добавить список
-        self.__driver.find_element(By.CSS_SELECTOR, ".js-save-edit").click() #mod-list-add-button
-        # time.sleep(1)
+        with allure.step("ввести название списка в поле \"Ввести заголовок списка\""):
+            self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').send_keys(name)
+            
+        with allure.step("нажать кнопку \"Добавить список\""):
+            self.__driver.find_element(By.CSS_SELECTOR, ".js-save-edit").click()
 
         # # нажать кнопку ENTER
-        # self.__driver.find_element(By.CSS_SELECTOR, ".js-save-edit").send_keys(Keys.ENTER)
-        # time.sleep(5)
+        # with allure.step("нажать кнопку ENTER"):        
+        #   self.__driver.find_element(By.CSS_SELECTOR, ".js-save-edit").send_keys(Keys.ENTER)
 
-    @allure.step("Создать два списка")   
+
+    @allure.step("Создать два списка:")   
     # def create_board(board_name:str, list_names = [])
     # Реализация:
     # Создать доску с именем board_name
     # В цикле пройтись по списку list_names и вызвать создание колонки с каждым именем.
     # Обратите внимание, что если список пустой, цикл выполнится 0 раз и не будет колонок
-    def create_lists(self):
+    def create_lists_for_moving(self, test_data: dict):
         # список названий списков
-        list_names = ["Первый список", "Второй список"]
+        list_names = test_data.get("list_names")
         length = len(list_names)
         counter = 0
         # ввести название списка

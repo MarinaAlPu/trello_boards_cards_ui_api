@@ -2,7 +2,6 @@ import requests
 import allure
 
 class ApiForUI:
-# class BoardAPI:
     def __init__(self, base_url: str, token: str) -> None:
         self.base_url = base_url
         self.token = token
@@ -39,16 +38,14 @@ class ApiForUI:
         return resp.json()
 
 
-    # @allure.step("Получить список колонок на доске {id}")
-    # def get_lists_by_board_id(self, id: str) -> list:
-    #     cookie = {"token": self.token}
-    #     path = "{trello}/boards/{board_id}/lists".format(trello = self.base_url, board_id = id)
-    #     resp = requests.get(path, json = cookie, cookies = cookie)
+    @allure.step("Получить список колонок на доске {id}")
+    def get_lists_by_board_id(self, id: str) -> list:
+        cookie = {"token": self.token}
+        path = "{trello}/boards/{board_id}/lists".format(trello = self.base_url, board_id = id)
+        resp = requests.get(path, json = cookie, cookies = cookie)
 
-    #     return resp.json()
+        return resp.json()
     
-
-
 
 # class CardAPI:
     # def __init__(self, base_url: str, token: str) -> None:

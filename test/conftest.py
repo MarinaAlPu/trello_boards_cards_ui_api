@@ -54,13 +54,15 @@ def api_client_for_ui() -> ApiForUI:
 
 @pytest.fixture
 def auth_for_ui(browser, test_data: dict):#, api_client_for_ui: ApiForUI
-    email = test_data.get("email")
-    password = test_data.get("password")
+    # email = test_data.get("email")
+    # password = test_data.get("password")
+    token = test_data.get("token")
 
     auth_page = AuthPage(browser)
-    auth_page.go()
-    auth_page.login_as(email, password)
-
+    # auth_page.go()
+    # auth_page.login_as(email, password)
+    auth_page.set_token(token)
+    
 
 @pytest.fixture
 def for_delete_board(auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):

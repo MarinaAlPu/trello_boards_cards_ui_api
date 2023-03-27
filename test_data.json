@@ -8,7 +8,7 @@
     "list_names": ["First list", "Second list"],
     "card_name": "New card",
     "new_data": {
-      "card_new_name": "Card's new name",
-      "card_new_description": "We can change card's description!"  
+      "card_new_name": "Card`s new name",
+      "card_new_description": "We can change card`s description!"  
     }
 }

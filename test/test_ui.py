@@ -106,60 +106,26 @@ def delete_card_test(browser, card_to_delete):
             assert len(cards_on_list_before) - len(cards_on_list_after) == 1
 
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 def update_card_test(browser, test_data: dict, card_to_delete):
     new_name = test_data.get("new_data")["card_new_name"]
-    print("\nновое имя: ")
-    print(new_name)
     new_description = test_data.get("new_data")["card_new_description"]
-    print("\nновое описание: ")
-    print(new_description)
-    # username = test_data.get("username")
-    # email = test_data.get("email")
-    # password = test_data.get("password")
-
-    # auth_page = AuthPage(browser)
-    # auth_page.go()
-    # auth_page.login_as(email, password)
-
-    # main_page = MainPage(browser)
-    # main_page.create_board_ui()
-    # time.sleep(5)
-
-    # board_page = BoardPage(browser)
-    # board_page.create_list()
-    # time.sleep(5)
-
-    # list_page = ListPage(browser)
-    # list_page.create_card()
-    # time.sleep(5)
 
     card_page = CardPage(browser)
 
     card_info_before = card_page.get_card_info_before_update()
     card_name_before = card_info_before.get("name")
-    print("\nимя карточки до изменения: ")
-    print(card_name_before)
     card_description_before = card_info_before.get("description")
-    print("\nописание карточки до изменения: ")
-    print(card_description_before)
 
     card_page.update_card(new_name, new_description)
 
     card_name_after = card_page.get_card_info_after_update().get("name")
-    print("\nимя карточки после изменения: ")
-    print(card_name_after)
     card_description_after = card_page.get_card_info_after_update().get("description")
-    print("\nописание карточки до изменения: ")
-    print(card_description_after)
-    time.sleep(5)
     with allure.step("Проверить, что данные карточки изменились:"):
         with allure.step("новое имя карточки: {new_name}"):
             assert card_name_after == new_name
         with allure.step("новое описание карточки: {new_description}"):
             assert card_description_after == new_description   
-
-    time.sleep(5)
 
 
 @pytest.mark.skip()

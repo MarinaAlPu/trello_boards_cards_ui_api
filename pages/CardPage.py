@@ -21,19 +21,6 @@ class CardPage:
         # self.__url = 
 
 
-    @allure.step("Получить данные карточки:")
-    def get_card_name(self):
-        return self.__driver.find_element(By.CSS_SELECTOR, ".js-card-details").text
-
-
-    # def get_element_text(self, selector):
-    #     return self.__driver.find_element(By.CSS_SELECTOR, selector).text
-
-    # @allure.step("Получить данные карточки:")
-    # def get_card_name(self):
-    #     return self.get_element_text(".js-card-details")
-
-
     @allure.step("Получить данные карточки ДО изменения информации:")
     def get_card_info_before_update(self):
         data_before = {"name": "",
@@ -79,51 +66,33 @@ class CardPage:
 
     @allure.step("Изменить данные карточки:")
     def update_card(self, name: str, description: str):
-        # name = "Card's new name"
-        # description = "We can change card's description!" 
-        print("Мы пришли в метод update_card")
-        # with allure.step("подождать загрузки всех необходимых элементов"):
-        #     WebDriverWait(self.__driver, 15).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".js-card-name")))
-        
         with allure.step("открыть карточку нажатием на неё"):
             self.__driver.find_element(By.CSS_SELECTOR, ".js-card-name").click()
-        # time.sleep(3)
-        print("открыли карточку")
+
         with allure.step("подождать загрузки всех необходимых элементов"):
             WebDriverWait(self.__driver, 15).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "textarea.js-card-detail-title-input")))
         
         with allure.step("кликнуть название карточки"):
-            # self.__driver.find_element(By.XPATH, '//h2[text()="New card")]').click()
             self.__driver.find_element(By.CSS_SELECTOR, "textarea.js-card-detail-title-input").click()
-            # time.sleep(3)
         
         with allure.step("удалить старое название карточки"):
             self.__driver.find_element(By.CSS_SELECTOR, ".is-editing").clear()
-            # time.sleep(3)
 
         with allure.step("ввести новое название карточки"):
             self.__driver.find_element(By.CSS_SELECTOR, ".is-editing").send_keys(name)
-            # time.sleep(3)
             self.__driver.find_element(By.CSS_SELECTOR, ".is-editing").send_keys(Keys.ENTER)
-            # time.sleep(3)
 
         with allure.step("кликнуть в поле \"Описание\""):
             self.__driver.find_element(By.CSS_SELECTOR, 'div[aria-label="Main content area, start typing to enter text."]').click()
-            self.__driver.find_element(By.CSS_SELECTOR, 'div[aria-label="Main content area, start typing to enter text."]').click()
-            # time.sleep(3)
 
         with allure.step("ввести новое описание в поле \"Описание\""):
             self.__driver.find_element(By.CSS_SELECTOR, 'div[aria-label="Main content area, start typing to enter text."]').send_keys(description)
-            # time.sleep(3)
 
         with allure.step("нажать кнопку \"Сохранить\""):
             self.__driver.find_element(By.CSS_SELECTOR, 'input[value=Сохранить]:first-child').click()
-        # time.sleep(3)
 
         with allure.step("закрыть карточку нажатием на \"крестик\" в правом верхнем углу"):
             self.__driver.find_element(By.CSS_SELECTOR, 'a[aria-label="Закрыть диалоговое окно"]').click()
-            print("Мы закончили метод update_card и пошли в фикстуру ")
-        # time.sleep(3)
 
 
     @allure.step("Удалить карточку:")

@@ -4,6 +4,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from testdata.DataProvider import DataProvider
 from configuration.ConfigProvider import ConfigProvider
 
 class AuthPage:
@@ -12,6 +13,15 @@ class AuthPage:
         url = ConfigProvider().get("ui", "base_url")
         self.__url = url + "/login"
         self.__driver = driver
+        self.__driver.get(ConfigProvider().get("ui", "url_for_token"))
+
+    def set_token(self, token):        
+        cookie = {
+            'name' : 'token',
+            'value' : token
+        }
+        self.__driver.add_cookie(cookie) 
+
 
     @allure.step("Открыть страницу авторизации")
     def go(self):

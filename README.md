@@ -6,11 +6,11 @@
 1. Клонировать проект командой `git clone https://github.com/MarinaAlPu/trello_boards_cards_ui_api.git`
 2. Установить все зависимости командой `python -m pip install -r requirements.txt`
 3. Запустить тесты:
-- запуск только UI-тестов командой `pytest -k test_ui.py`
+- запуск только UI-тестов командой `python -m pytest -k test_ui.py`
     - с созданием папки с результатами: `python -m pytest -k test_api.py --alluredir=.\allure-files`
-- запуск только API-тестов командой `pytest -k test_api.py`
+- запуск только API-тестов командой `python -m pytest -k test_api.py`
     - с созданием папки с результатами: `python -m pytest -k test_ui.py --alluredir=.\allure-files`
-- запуск всех тестов  командой `pytest`
+- запуск всех тестов  командой `python -m pytest`
     - с созданием папки с результатами: `python -m pytest --alluredir=.\allure-files`
 4. Сгенерировать отчёт командой `allure generate allure-files -o allure-report`
 5. Открыть отчёт командой `allure open allure-report`

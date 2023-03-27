@@ -65,7 +65,7 @@ def auth_for_ui(browser, test_data: dict, api_client_for_ui: ApiForUI):
 
 
 @pytest.fixture
-def auth_for_delete_board(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
+def for_delete_board(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
     board_name = test_data.get("board_name")
 
     api_client_for_ui.create_board(board_name)
@@ -74,7 +74,7 @@ def auth_for_delete_board(browser, auth_for_ui, test_data: dict, api_client_for_
 
 
 @pytest.fixture
-def auth_for_create_board(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
+def for_create_board(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
     org_id =test_data.get("org_id")
     board_name = test_data.get("board_name")
 
@@ -116,7 +116,7 @@ def lists_name_on_board_for_ui(api_client_for_ui: ApiForUI, dummy_board_for_ui: 
             'list_three_id': lists_on_board[2]["name"]
         }
 
-    with allure.step("перейти к удалению доски"):    
+    with allure.step("перейти к удалению доски"): # удаление доски - после yield, тут написано, чтобы красиво было в отчёте
         yield lists
 
 
@@ -129,6 +129,7 @@ def card_to_delete(browser, dummy_board_for_ui: str, test_data: dict):
 @pytest.fixture
 def dummy_board_for_moving(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
     board_name = test_data.get("board_name")
+    card_name = test_data.get("card_name")
     # list_name = test_data.get("list_names")[0]
 
     list_names = test_data.get("list_names")
@@ -142,15 +143,23 @@ def dummy_board_for_moving(browser, auth_for_ui, test_data: dict, api_client_for
     # Создать доску с именем board_name
     # В цикле пройтись по списку list_names и вызвать создание колонки с каждым именем.
     # Обратите внимание, что если список пустой, цикл выполнится 0 раз и не будет колонок
-    
+    print("\nпошли создавать колонки в метод create_lists_for_moving")
+    board_page = BoardPage(browser)
+    board_page.create_lists_for_moving(list_names)
+    print("\nосоздали две доски и вернулись в тест")
+
+    list_page = ListPage(browser)
+    list_page.create_card(card_name)
+
+    print("\nосоздали карточку и вернулись в тест")
     board_page = BoardPage(browser)
 
 
 
-    board_page.create_lists_for_moving(test_data)
+    # board_page.create_lists_for_moving()#test_data
 
-    list_page = ListPage(browser)
-    list_page.create_card()
+    # list_page = ListPage(browser)
+    # list_page.create_card()
 
     yield browser
 

@@ -130,36 +130,15 @@ def card_to_delete(browser, dummy_board_for_ui: str, test_data: dict):
 def dummy_board_for_moving(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
     board_name = test_data.get("board_name")
     card_name = test_data.get("card_name")
-    # list_name = test_data.get("list_names")[0]
-
     list_names = test_data.get("list_names")
-    length = len(list_names)
-    counter = 0
 
     resp = api_client_for_ui.create_board(board_name).get("id")
 
-    # def create_board(board_name:str, list_names = [])
-    # Реализация:
-    # Создать доску с именем board_name
-    # В цикле пройтись по списку list_names и вызвать создание колонки с каждым именем.
-    # Обратите внимание, что если список пустой, цикл выполнится 0 раз и не будет колонок
-    print("\nпошли создавать колонки в метод create_lists_for_moving")
     board_page = BoardPage(browser)
     board_page.create_lists_for_moving(list_names)
-    print("\nосоздали две доски и вернулись в тест")
 
     list_page = ListPage(browser)
     list_page.create_card(card_name)
-
-    print("\nосоздали карточку и вернулись в тест")
-    board_page = BoardPage(browser)
-
-
-
-    # board_page.create_lists_for_moving()#test_data
-
-    # list_page = ListPage(browser)
-    # list_page.create_card()
 
     yield browser
 

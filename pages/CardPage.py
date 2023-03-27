@@ -168,21 +168,8 @@ class CardPage:
 
         with allure.step("закрыть карточку нажатием на \"крестик\" в правом верхнем углу"):
             self.__driver.find_element(By.CSS_SELECTOR, 'a[aria-label="Закрыть диалоговое окно"]').click()
-            print("Мы закончили метод update_card и пошли в тест проверять ассерты")
+            print("Мы закончили метод update_card и пошли в фикстуру ")
         time.sleep(3)
-
-
-    @allure.step("Получить список, в котором находится открытая карточка:")
-    def get_list_of_card(self):
-        with allure.step("открыть карточку, нажав на неё"):
-            self.__driver.find_element(By.CSS_SELECTOR, ".js-card-name").click()
-
-        with allure.step("получить название списка, в котором находится карточка"):
-            list_name = self.__driver.find_element(By.CSS_SELECTOR, ".js-open-move-from-header").text
-
-        with allure.step("закрыть карточку"):
-            self.__driver.find_element(By.CSS_SELECTOR, '.js-close-window').click()
-            return list_name
 
 
     @allure.step("Удалить карточку:")
@@ -196,6 +183,19 @@ class CardPage:
         with allure.step("нажать кнопку \"Архивировать\""):
             self.__driver.find_element(By.CSS_SELECTOR, ".js-archive").click()
 
+
+    @allure.step("Получить список, в котором находится открытая карточка:")
+    def get_list_of_card(self):
+        with allure.step("открыть карточку, нажав на неё"):
+            self.__driver.find_element(By.CSS_SELECTOR, ".js-card-name").click()
+
+        with allure.step("получить название списка, в котором находится карточка"):
+            list_name = self.__driver.find_element(By.CSS_SELECTOR, ".js-open-move-from-header").text
+
+        with allure.step("закрыть карточку"):
+            self.__driver.find_element(By.CSS_SELECTOR, '.js-close-window').click()
+            return list_name
+        
 
     @allure.step("Получить название списка карточки ДО перемещения:")
     def get_card_list_before_moving(self):
@@ -225,5 +225,5 @@ class CardPage:
         with allure.step("закрыть карточку"):
             self.__driver.find_element(By.CSS_SELECTOR, '.js-close-window').click()
 
-        print("\nзакрыли карточку и пошли в тест проверять ассерты")
+        print("\nзакрыли карточку и пошли в фикстуру")
         return list_name_after

@@ -164,42 +164,15 @@ def update_card_test(browser, test_data: dict, card_to_delete):
 
 
 # @pytest.mark.skip()
-def move_card_test(browser, test_data: dict, dummy_board_for_moving):
-    list_names = test_data.get("list_names")
-    card_name = test_data.get("card_name")
-    # username = test_data.get("username")
-    # email = test_data.get("email")
-    # password = test_data.get("password") 
-
-    # auth_page = AuthPage(browser)
-    # auth_page.go()
-    # auth_page.login_as(email, password)
-
-    # main_page = MainPage(browser)
-    # main_page.create_board_ui()
-    # time.sleep(5)
-    # print("\nпошли создавать колонки в метод create_lists_for_moving")
-    # board_page = BoardPage(browser)
-    # board_page.create_lists_for_moving(list_names)
-    # time.sleep(5)
-    # print("\nосоздали две доски и вернулись в тест")
-
+def move_card_test(browser, dummy_board_for_moving):
     list_page = ListPage(browser)
-    # list_page.create_card(card_name)
-    # time.sleep(5)
-    # print("\nосоздали карточку и вернулись в тест")
-
     card_page = CardPage(browser)
 
     list_of_card_before = card_page.get_list_of_card()
-    print("\nколонка до перемещения")
-    print(list_of_card_before)
 
     list_page.move_card()
 
     list_of_card_after = card_page.get_list_of_card()
-    print("\nколонка после перемещения")
-    print(list_of_card_after)
 
     with allure.step("Проверить, что название колонки, в которой находится карточка, изменилось"):
         assert list_of_card_after != list_of_card_before

@@ -94,47 +94,21 @@ class BoardPage:
 
 
     @allure.step("Создать два списка:")   
-    # def create_board(board_name:str, list_names = [])
-    # Реализация:
-    # Создать доску с именем board_name
-    # В цикле пройтись по списку list_names и вызвать создание колонки с каждым именем.
-    # Обратите внимание, что если список пустой, цикл выполнится 0 раз и не будет колонок
-    def create_lists_for_moving(self, list_names: list):#, test_data: dict
-        print("\nпришли создавать колонки в метод create_lists_for_moving")
-
-        self.__driver.find_element(By.CSS_SELECTOR, 'div[title="New board"]').click()
-        print("\nоткрыли доску")
-        
-        print("\nсписок названий колонок:")
-        print(list_names)
-        # список названий списков
-        # list_names = ["First list", "Second list"]#test_data.get("list_names")
+    def create_lists_for_moving(self, list_names: list):
         length = len(list_names)
-        print("\nнашли длину списка названий колонок:")
-        print(length)
         counter = 0
-        print("\nопределили счётчик:")
-        print(length)
-        # ввести название списка
-        while counter <= (length - 1):
-            # with allure.step("подождать загрузки всех необходимых элементов"):
-            #     WebDriverWait(self.__driver, 15).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'span[placeholder="Добавить список"]')))
         
-            # self.__driver.find_element(By.CSS_SELECTOR, "#board").send_keys(Keys.ENTER)
+        with allure.step("открыть доску"):
+            self.__driver.find_element(By.CSS_SELECTOR, 'div[title="New board"]').click()
 
+        while counter <= (length - 1):
             with allure.step("нажать кнопку \"Добавить список\""):
                 self.__driver.find_element(By.CSS_SELECTOR, '.js-open-add-list').click()
 
             with allure.step("ввести название списка в поле \"Ввести заголовок списка\" {list_names[counter]}"):
                 self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').send_keys(list_names[counter])
-            # self.__driver.find_element(By.CSS_SELECTOR, 'input[class="list-name-input"]').send_keys("Первый список")
-            # time.sleep(1)
 
             with allure.step("нажать кнопку \"Добавить список\""):        
-                # self.__driver.find_element(By.CSS_SELECTOR, ".js-save-edit").click()
-                # self.__driver.find_element(By.CSS_SELECTOR, ".is-editing").send_keys(Keys.ENTER)
                 self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').send_keys(Keys.ENTER)
                 self.__driver.find_element(By.CSS_SELECTOR, "#board").click()
                 counter = counter + 1
-
-        print("\nосоздали две доски и пошли обратно в тест")

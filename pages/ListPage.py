@@ -55,15 +55,6 @@ class ListPage:
 
     @allure.step("Перенести карточку в другую колонку:")
     def move_card(self):
-
-        # with allure.step("Получить название карточки"):
-        #     container = self.__driver.find_element(By.CSS_SELECTOR, "div[data-testid=account-menu]>div>div:last-child")
-        #     fields = container.find_elements(By.CSS_SELECTOR, "div")
-        #     name = fields[0].text
-        #     email = fields[1].text
-        #     return [name, email]
-
-
     # def test_drag_and_drop_onto_element(driver):
     #     driver.get('https://selenium.dev/selenium/web/mouse_interaction.html')
 
@@ -74,8 +65,6 @@ class ListPage:
     #         .perform()
 
     #     assert driver.find_element(By.ID, "drop-status").text == "dropped"
-
-# self.__driver.find_element(By.XPATH, '/div[@id="board"]/div[@class="js-list"]/div[last()]/a/span*[text()="Карточка для перетаскивания"]').click()
 
         with allure.step("найти карточку, которую надо перенести в другую колонку"):
             draggable = self.__driver.find_element(By.XPATH, '//span[text()="New card"]')
@@ -91,4 +80,3 @@ class ListPage:
         with allure.step("взять карточку и перенести её в нужную колонку"):
             ActionChains(self.__driver).drag_and_drop(draggable, droppable).perform()    
         
-    #     assert driver.find_element('//span[text()="New card"]').text == "dropped"

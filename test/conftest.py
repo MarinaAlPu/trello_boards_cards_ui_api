@@ -1,25 +1,23 @@
 import allure
 import pytest
-import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.firefox import GeckoDriverManager
 
+from testdata.DataProvider import DataProvider
+from configuration.ConfigProvider import ConfigProvider
+
 from pages.AuthPage import AuthPage
 from pages.MainPage import MainPage
 from pages.BoardPage import BoardPage
 from pages.ListPage import ListPage
 from pages.CardPage import CardPage
-
 from pages.ApiPage import ApiForUI
 
 from api.BoardAPI import BoardAPI
 from api.CardAPI import CardAPI
-
-from configuration.ConfigProvider import ConfigProvider
-from testdata.DataProvider import DataProvider
 
 @pytest.fixture
 def test_data():
@@ -55,7 +53,7 @@ def api_client_for_ui() -> ApiForUI:
     
 
 @pytest.fixture
-def auth_for_ui(browser, test_data: dict, api_client_for_ui: ApiForUI):
+def auth_for_ui(browser, test_data: dict):#, api_client_for_ui: ApiForUI
     email = test_data.get("email")
     password = test_data.get("password")
 
@@ -65,7 +63,7 @@ def auth_for_ui(browser, test_data: dict, api_client_for_ui: ApiForUI):
 
 
 @pytest.fixture
-def for_delete_board(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
+def for_delete_board(auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
     board_name = test_data.get("board_name")
 
     api_client_for_ui.create_board(board_name)
@@ -74,7 +72,7 @@ def for_delete_board(browser, auth_for_ui, test_data: dict, api_client_for_ui: A
 
 
 @pytest.fixture
-def for_create_board(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
+def for_create_board(auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
     org_id =test_data.get("org_id")
     board_name = test_data.get("board_name")
 
@@ -129,8 +127,8 @@ def card_to_delete(browser, dummy_board_for_ui: str, test_data: dict):
 @pytest.fixture
 def dummy_board_for_moving(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
     board_name = test_data.get("board_name")
-    card_name = test_data.get("card_name")
     list_names = test_data.get("list_names")
+    card_name = test_data.get("card_name")
 
     resp = api_client_for_ui.create_board(board_name).get("id")
 
@@ -162,7 +160,7 @@ def api_client_no_auth() -> BoardAPI:
 
 @pytest.fixture
 def dummy_board_id(api_client: BoardAPI) -> str:    
-    with allure.step("Предварительно создать доску. Количество колонок по умолчанию - три"):
+    with allure.step("Создать доску. Количество колонок по умолчанию - три"):
         resp = api_client.create_board("Board to be deleted").get("id")
         return resp
 
@@ -179,7 +177,7 @@ def delete_board(api_client: BoardAPI) -> str:
 
 @pytest.fixture
 def dummy_board(api_client: BoardAPI) -> str:
-    with allure.step("Предварительно создать доску. Количество колонок по умолчанию - три"):
+    with allure.step("Создать доску. Количество колонок по умолчанию - три"):
         resp = api_client.create_board("Board to be deleted").get("id")
 
         yield resp
@@ -214,7 +212,7 @@ def api_card_client() -> CardAPI:
 def dummy_card_id(api_card_client: CardAPI, lists_on_board: dict) -> str:
     list_one_id = lists_on_board['list_one_id']
 
-    with allure.step("Предварительно создать карточку"):
+    with allure.step("Создать карточку"):
         resp = api_card_client.create_card(list_one_id, "Card to be update and deleted").get("id")
 
         return resp

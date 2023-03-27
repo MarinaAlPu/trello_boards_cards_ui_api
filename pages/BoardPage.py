@@ -42,18 +42,18 @@ class BoardPage:
     def get_board_info(self) -> str:
         with allure.step("подождать загрузки всех необходимых элементов"):
             WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "h1")))
-
+        print("пришли в метод get_board_info")
         with allure.step("получить название доски"):
-            return self.__driver.find_element(By.CSS_SELECTOR, "h1").text
+            return self.__driver.find_element(By.CSS_SELECTOR, "h1").get_property('textContent') #text
 
 
     @allure.step("Удалить доску:")
     def delete_board_ui(self) -> None:
         with allure.step("подождать загрузки всех необходимых элементов"):
-            WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button[aria-label=Меню]")))
+            WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button[aria-label=\"Меню\"]")))
         # нажать кнопку с тремя точками справа
         with allure.step("нажать кнопку \"Меню\""):
-            self.__driver.find_element(By.CSS_SELECTOR, "button[aria-label=Меню]").click()
+            self.__driver.find_element(By.CSS_SELECTOR, "button[aria-label=\"Меню\"]").click()
 
         with allure.step("нажать кнопку \"Ещё\""):
             self.__driver.find_element(By.CSS_SELECTOR, "a.js-open-more").click()
@@ -97,7 +97,7 @@ class BoardPage:
     def create_lists_for_moving(self, list_names: list):
         length = len(list_names)
         counter = 0
-        
+
         with allure.step("открыть доску"):
             self.__driver.find_element(By.CSS_SELECTOR, 'div[title="New board"]').click()
 
@@ -105,7 +105,7 @@ class BoardPage:
             with allure.step("нажать кнопку \"Добавить список\""):
                 self.__driver.find_element(By.CSS_SELECTOR, '.js-open-add-list').click()
 
-            with allure.step("ввести название списка в поле \"Ввести заголовок списка\" {list_names[counter]}"):
+            with allure.step("ввести название списка в поле \"Ввести заголовок списка\""):
                 self.__driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Ввести заголовок списка"]').send_keys(list_names[counter])
 
             with allure.step("нажать кнопку \"Добавить список\""):        

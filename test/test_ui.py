@@ -54,8 +54,7 @@ def create_board_test(browser, for_create_board, test_data: dict):
 
 
 @pytest.mark.skip()
-def delete_board_test(browser, for_delete_board):#, test_data: dict
-    # board_name = test_data.get("board_name")
+def delete_board_test(browser, for_delete_board):
     main_page = MainPage(browser)
     boards_before = main_page.get_boards_before()
     main_page.open_board()
@@ -145,34 +144,34 @@ def update_card_test(browser, test_data: dict, card_to_delete):
     print("\nописание карточки до изменения: ")
     print(card_description_before)
 
-    card_page.update_card()#new_name, new_description # не хочет сотрудничать
+    card_page.update_card(new_name, new_description)
 
-    # card_name_after = card_page.get_card_info_after_update().get("name")
-    # print("\nимя карточки после изменения: ")
-    # print(card_name_after)
-    # card_description_after = card_page.get_card_info_after_update().get("description")
-    # print("\nописание карточки до изменения: ")
-    # print(card_description_after)
-    # time.sleep(5)
-    # with allure.step("Проверить, что данные карточки изменились:"):
-    #     with allure.step("новое имя карточки: {new_name}"):
-    #         assert card_name_after == new_name
-    #     with allure.step("новое описание карточки: {new_description}"):
-    #         assert card_description_after == new_description   
+    card_name_after = card_page.get_card_info_after_update().get("name")
+    print("\nимя карточки после изменения: ")
+    print(card_name_after)
+    card_description_after = card_page.get_card_info_after_update().get("description")
+    print("\nописание карточки до изменения: ")
+    print(card_description_after)
+    time.sleep(5)
+    with allure.step("Проверить, что данные карточки изменились:"):
+        with allure.step("новое имя карточки: {new_name}"):
+            assert card_name_after == new_name
+        with allure.step("новое описание карточки: {new_description}"):
+            assert card_description_after == new_description   
 
-    # time.sleep(5)
+    time.sleep(5)
 
 
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def move_card_test(browser, dummy_board_for_moving):
     list_page = ListPage(browser)
     card_page = CardPage(browser)
 
-    list_of_card_before = card_page.get_list_of_card()
+    list_of_card_before = card_page.get_card_list_before_moving()
 
     list_page.move_card()
 
-    list_of_card_after = card_page.get_list_of_card()
+    list_of_card_after = card_page.get_card_list_after_moving()
 
     with allure.step("Проверить, что название колонки, в которой находится карточка, изменилось"):
         assert list_of_card_after != list_of_card_before

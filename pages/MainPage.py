@@ -8,6 +8,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from configuration.ConfigProvider import ConfigProvider
 from testdata.DataProvider import DataProvider
 
+import time
+
 class MainPage:
 
     def __init__(self, driver: WebDriver) -> None:
@@ -52,8 +54,10 @@ class MainPage:
             self.__driver.find_element(By.CSS_SELECTOR, "li[data-testid=create-board-tile]").click()
 
         with allure.step("ввести название доски в поле \"Заголовок доски\""):
-            self.__driver.find_element(By.CSS_SELECTOR, "input[data-testid=create-board-title-input]").send_keys(board_name) 
+            self.__driver.find_element(By.CSS_SELECTOR, "input[data-testid=create-board-title-input]").send_keys(board_name)
 
+        with allure.step("подождать загрузки всех необходимых элементов"):
+            WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.XPATH, "button[data-testid=create-board-submit-button]")))
         with allure.step("нажать кнопку \"Создать\""):
             self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=create-board-submit-button]").click()
 

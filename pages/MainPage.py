@@ -12,14 +12,24 @@ class MainPage:
         # self.data = DataProvider()
         # url = ConfigProvider().get("ui", "base_url")
 
-    # @allure.step("Получить текущий URL")
-    # def get_current_url(self) -> str:
-    #     return self.__driver.current_url
+    @allure.step("Получить текущий URL")
+    def get_current_url(self) -> str:
+        return self.__driver.current_url
 
 
-    # @allure.step("Открыть боковое меню \"УЧЁТНАЯ ЗАПИСЬ\"")
-    # def open_menu(self):
-    #     self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=header-member-menu-button]").click()        
+    @allure.step("Открыть боковое меню \"УЧЁТНАЯ ЗАПИСЬ\"")
+    def open_menu(self):
+        self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=header-member-menu-button]").click()        
+
+
+    @allure.step("Прочитать информацию о пользователе")
+    def get_account_info(self) -> list[str]:
+        container = self.__driver.find_element(By.CSS_SELECTOR, "div[data-testid=account-menu]>div>div:last-child")
+        fields = container.find_elements(By.CSS_SELECTOR, "div")
+        name = fields[0].text
+        email = fields[1].text
+
+        return [name, email]
 
 
     # @allure.step("Посчитать количество досок в Рабочем пространстве Trello ДО добавления новой доски:")

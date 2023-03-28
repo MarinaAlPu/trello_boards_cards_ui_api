@@ -6,14 +6,15 @@ from pages.ListPage import ListPage
 from pages.CardPage import CardPage
 
 from configuration.ConfigProvider import ConfigProvider
+from user_data.UserProvider import UserProvider
 
 import pytest
 
 # @pytest.mark.skip()
-# def auth_test(browser, test_data: dict):
-#     username = test_data.get("username")
-#     email = test_data.get("email")
-#     password = test_data.get("password")
+# def auth_test(browser):#, test_data: dict
+#     username = UserProvider().get("user", "username")
+#     email = UserProvider().get("user", "email")
+#     password = UserProvider().get("user", "password")
 
 #     auth_page = AuthPage(browser)
 #     auth_page.go()
@@ -121,11 +122,6 @@ def update_card_test(browser, test_data: dict, card_to_delete):
     new_description = test_data.get("new_data")["card_new_description"]
 
     card_page = CardPage(browser)
-
-    card_info_before = card_page.get_card_info_before_update()
-    card_name_before = card_info_before.get("name")
-    card_description_before = card_info_before.get("description")
-
     card_page.update_card(new_name, new_description)
 
     card_name_after = card_page.get_card_info_after_update().get("name")

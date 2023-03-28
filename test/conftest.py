@@ -6,6 +6,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.firefox import GeckoDriverManager
 
+from user_data.UserProvider import UserProvider
 from testdata.DataProvider import DataProvider
 from configuration.ConfigProvider import ConfigProvider
 
@@ -23,7 +24,13 @@ from api.CardAPI import CardAPI
 def test_data():
     with allure.step("Получить тестовые данные"):
         return DataProvider()
+    
 
+@pytest.fixture
+def user_data():
+    with allure.step("Получить данные пользователя"):
+        return UserProvider()
+    
 
 @pytest.fixture
 def browser():
@@ -50,13 +57,13 @@ def api_client_for_ui() -> ApiForUI:
     with allure.step("Создать экземпляр класса ApiForUI"):
         return ApiForUI(
             ConfigProvider().get_api_url(),
-            DataProvider().get_token())
+            UserProvider().get_user_token())
     
 
 @pytest.fixture
-def auth_for_ui(browser, test_data: dict):#, api_client_for_ui: ApiForUI
-    email = test_data.get("email")
-    password = test_data.get("password")
+def auth_for_ui(browser):#, user_data: dict, api_client_for_ui: ApiForUI
+    email = UserProvider().get("user", "email")
+    password = UserProvider().get("user", "password")
     # with allure.step("Авторизоваться"):
     #     token = test_data.get("token")
 
@@ -70,12 +77,8 @@ def auth_for_ui(browser, test_data: dict):#, api_client_for_ui: ApiForUI
 @pytest.fixture
 def for_delete_board(auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
     board_name = test_data.get("board_name")
-    print("\n получили имя доски:")
-    print(board_name)
     api_client_for_ui.create_board(board_name)
-    print("\n создали доску")
-    
-    print("\n пошли в тест")
+
     yield browser
 
 
@@ -157,7 +160,7 @@ def api_client() -> BoardAPI:
     with allure.step("Создать экземпляр класса BoardAPI"):
         return BoardAPI(
             ConfigProvider().get_api_url(),
-            DataProvider().get_token())
+            UserProvider().get_user_token())
 
 
 @pytest.fixture
@@ -176,7 +179,9 @@ def dummy_board_id(api_client: BoardAPI) -> str:
 @pytest.fixture
 def delete_board(api_client: BoardAPI) -> str:
     dictionary = {"board_id": ""}
+
     yield dictionary
+
     with allure.step("Получить id доски для её удаления"):
         board_id = dictionary.get("board_id")
     with allure.step("Удалить доску после теста"):
@@ -213,7 +218,7 @@ def api_card_client() -> CardAPI:
     with allure.step("Создать экземпляр класса CardAPI"):
         return CardAPI(
             ConfigProvider().get("api", "base_url"),
-            DataProvider().get_token())
+            UserProvider().get_user_token())
 
 
 @pytest.fixture

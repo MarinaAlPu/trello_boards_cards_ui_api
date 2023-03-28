@@ -8,6 +8,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 from configuration.ConfigProvider import ConfigProvider
+from user_data.UserProvider import UserProvider
 
 class AuthPage:
 
@@ -16,7 +17,8 @@ class AuthPage:
         self.__url = url + "/login"
         self.__driver = driver
         
-    def set_token(self, token):
+    def set_token(self):
+        token = UserProvider().get_user_token("user", "token")
         with allure.step("Авторизоваться"):
             # открыть хром
             browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()))

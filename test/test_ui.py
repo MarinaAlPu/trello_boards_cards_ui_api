@@ -5,7 +5,7 @@ from pages.BoardPage import BoardPage
 from pages.ListPage import ListPage
 from pages.CardPage import CardPage
 
-import time
+from configuration.ConfigProvider import ConfigProvider
 
 import pytest
 
@@ -34,41 +34,50 @@ import pytest
 #             assert info[1] == email
 
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 def create_board_test(browser, for_create_board, test_data: dict):
     board_name = test_data.get("board_name")
 
     main_page = MainPage(browser)
-    boards_before = main_page.get_boards_before()
+
+    with allure.step("Посчитать количество досок ДО создания новой доски:"):
+        boards_before = main_page.get_boards_before_add_board()
+
     main_page.create_board_ui(board_name)
 
     board_page = BoardPage(browser)
     info = board_page.get_board_info()
-    boards_after = main_page.get_boards_after()
 
-    with allure.step("Проверить, что в \"Рабочем пространстве Trello\" досок стало больше на 1"):
+    with allure.step("Посчитать количество досок ПОСЛЕ создания новой доски:"):
+        boards_after = main_page.get_boards_after_add_board()
+
+    with allure.step("Проверить, что досок стало больше на 1"):
         assert boards_after - boards_before == 1
 
     with allure.step("Проверить, что название созданной доски: " + board_name):
         assert info == board_name
 
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 def delete_board_test(browser, for_delete_board):
     main_page = MainPage(browser)
-    boards_before = main_page.get_boards_before()
+    
+    with allure.step("Посчитать количество досок ДО удаления доски:"):
+        boards_before = main_page.get_boards_before_delete()
+
     main_page.open_board()
     
     board_page = BoardPage(browser)
     board_page.delete_board_ui()
 
-    boards_after = main_page.get_boards_after()
+    with allure.step("Посчитать количество досок ПОСЛЕ удаления доски:"):
+        boards_after = main_page.get_boards_after_delete()
 
-    with allure.step("Проверить, что в \"Рабочем пространстве Trello\" досок стало меньше на 1"):
+    with allure.step("Проверить, что досок стало меньше на 1"):
         assert boards_before - boards_after == 1   
       
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 def create_card_test(browser, dummy_board_for_ui: str, test_data: dict):
     card_name = test_data.get("card_name")
 
@@ -89,7 +98,7 @@ def create_card_test(browser, dummy_board_for_ui: str, test_data: dict):
             assert new_card_name == card_name   
 
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 def delete_card_test(browser, card_to_delete):
     list_page = ListPage(browser)
     with allure.step("Посчитать количество карточек в колонке ДО удаления карточки"):
@@ -128,7 +137,7 @@ def update_card_test(browser, test_data: dict, card_to_delete):
             assert card_description_after == new_description   
 
 
-@pytest.mark.skip()
+# @pytest.mark.skip()
 def move_card_test(browser, dummy_board_for_moving):
     list_page = ListPage(browser)
     card_page = CardPage(browser)

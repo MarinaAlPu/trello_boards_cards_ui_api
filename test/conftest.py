@@ -38,6 +38,7 @@ def browser():
 
         browser.implicitly_wait(timeout)
         browser.maximize_window()
+
         yield browser
 
     with allure.step("Закрыть браузер"):
@@ -54,22 +55,27 @@ def api_client_for_ui() -> ApiForUI:
 
 @pytest.fixture
 def auth_for_ui(browser, test_data: dict):#, api_client_for_ui: ApiForUI
-    # email = test_data.get("email")
-    # password = test_data.get("password")
-    token = test_data.get("token")
+    email = test_data.get("email")
+    password = test_data.get("password")
+    # with allure.step("Авторизоваться"):
+    #     token = test_data.get("token")
 
     auth_page = AuthPage(browser)
-    # auth_page.go()
-    # auth_page.login_as(email, password)
-    auth_page.set_token(token)
+    auth_page.go()
+    auth_page.login_as(email, password)
+
+        # auth_page.set_token(token)
     
 
 @pytest.fixture
 def for_delete_board(auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
     board_name = test_data.get("board_name")
-
+    print("\n получили имя доски:")
+    print(board_name)
     api_client_for_ui.create_board(board_name)
+    print("\n создали доску")
     
+    print("\n пошли в тест")
     yield browser
 
 

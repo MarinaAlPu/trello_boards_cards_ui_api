@@ -8,17 +8,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from configuration.ConfigProvider import ConfigProvider
 from testdata.DataProvider import DataProvider
 
-from selenium.webdriver.common.action_chains import ActionChains
-
-import time
-
 class CardPage:
 
     def __init__(self, driver: WebDriver) -> None:
         self.__driver = driver
         self.data = DataProvider()
         url = ConfigProvider().get("ui", "base_url")
-        # self.__url = 
+
+    @allure.step("Получить имя карточки:")
+    def get_card_name(self):
+        return self.__driver.find_element(By.CSS_SELECTOR, ".js-card-details").text
 
 
     @allure.step("Получить данные карточки ДО изменения информации:")
@@ -122,9 +121,13 @@ class CardPage:
 
     @allure.step("Получить название списка карточки ДО перемещения:")
     def get_card_list_before_moving(self):
+
         with allure.step("открыть карточку, нажав на неё"):
             self.__driver.find_element(By.CSS_SELECTOR, ".js-card-name").click()
 
+        with allure.step("подождать загрузки всех необходимых элементов"):
+            WebDriverWait(self.__driver, 15).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.js-open-move-from-header')))
+        
         with allure.step("получить название списка карточки"):
             list_name_before = self.__driver.find_element(By.CSS_SELECTOR, '.js-open-move-from-header').text
         print("\nназвание списка карточки до перемещения")
@@ -137,8 +140,8 @@ class CardPage:
     
     @allure.step("Получить название списка карточки ПОСЛЕ перемещения:")
     def get_card_list_after_moving(self):
-        # with allure.step("открыть карточку, нажав на неё"):
-        #     self.__driver.find_element(By.CSS_SELECTOR, ".js-card-name").click()
+        with allure.step("открыть карточку, нажав на неё"):
+            self.__driver.find_element(By.CSS_SELECTOR, ".js-card-name").click()
 
         with allure.step("получить название списка карточки"):
             list_name_after = self.__driver.find_element(By.CSS_SELECTOR, '.js-open-move-from-header').text

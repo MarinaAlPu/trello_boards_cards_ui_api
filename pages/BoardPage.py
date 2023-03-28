@@ -8,15 +8,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from configuration.ConfigProvider import ConfigProvider
 from testdata.DataProvider import DataProvider
 
-import time
-
 class BoardPage:
 
     def __init__(self, driver: WebDriver) -> None:
         self.__driver = driver
         self.data = DataProvider()
         url = ConfigProvider().get("ui", "base_url")
-        # self.__url = 
 
     # @allure.step("Получить текущий URL")
     # def get_current_url(self) -> str:
@@ -44,7 +41,7 @@ class BoardPage:
             WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "h1")))
         print("пришли в метод get_board_info")
         with allure.step("получить название доски"):
-            return self.__driver.find_element(By.CSS_SELECTOR, "h1").get_property('textContent') #text
+            return self.__driver.find_element(By.CSS_SELECTOR, "h1").get_property('textContent')
 
 
     @allure.step("Удалить доску:")
@@ -73,8 +70,8 @@ class BoardPage:
 
     @allure.step("Создать список {name}:")
     def create_list_ui(self, name: str):
-        # with allure.step("подождать загрузки всех необходимых элементов"):
-        #     WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'div[title="New board"]')))
+        with allure.step("подождать загрузки всех необходимых элементов"):
+            WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'div[title="New board"]')))
 
         with allure.step("открыть доску"):
             self.__driver.find_element(By.CSS_SELECTOR, 'div[title="New board"]').click()

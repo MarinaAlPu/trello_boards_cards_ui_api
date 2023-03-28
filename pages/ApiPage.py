@@ -25,7 +25,8 @@ class ApiForUI:
         path = "{trello}/boards".format(trello = self.base_url)
         cookie = {"token": self.token}
         resp = requests.post(path, json = body, cookies = cookie)
-
+        print("\n ответ на запрос о создании новой доски")
+        print(resp)
         return resp.json()
 
 

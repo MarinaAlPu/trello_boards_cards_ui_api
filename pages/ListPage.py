@@ -10,16 +10,12 @@ from selenium.webdriver.common.action_chains import ActionChains
 from configuration.ConfigProvider import ConfigProvider
 from testdata.DataProvider import DataProvider
 
-import time
-
 class ListPage:
 
     def __init__(self, driver: WebDriver) -> None:
         self.__driver = driver
         self.data = DataProvider()
         url = ConfigProvider().get("ui", "base_url")
-        # self.__url = 
-
 
     def get_cards_on_list(self):
         cards = self.__driver.find_elements(By.CSS_SELECTOR, ".js-card-details")
@@ -55,17 +51,6 @@ class ListPage:
 
     @allure.step("Перенести карточку в другую колонку:")
     def move_card(self):
-    # def test_drag_and_drop_onto_element(driver):
-    #     driver.get('https://selenium.dev/selenium/web/mouse_interaction.html')
-
-    #     draggable = driver.find_element(By.ID, "draggable")
-    #     droppable = driver.find_element(By.ID, "droppable")
-    #     ActionChains(driver)\
-    #         .drag_and_drop(draggable, droppable)\
-    #         .perform()
-
-    #     assert driver.find_element(By.ID, "drop-status").text == "dropped"
-
         with allure.step("найти карточку, которую надо перенести в другую колонку"):
             draggable = self.__driver.find_element(By.XPATH, '//span[text()="New card"]')
             # find_serial_number = browser.find_element_by_xpath('.//span[text()=" + ПЕРЕМЕННАЯ + ")]')

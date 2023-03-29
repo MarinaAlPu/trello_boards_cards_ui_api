@@ -9,7 +9,6 @@ from configuration.ConfigProvider import ConfigProvider
 from testdata.DataProvider import DataProvider
 
 class BoardPage:
-
     def __init__(self, driver: WebDriver) -> None:
         self.__driver = driver
         self.data = DataProvider()
@@ -39,7 +38,7 @@ class BoardPage:
     def get_board_info(self) -> str:
         with allure.step("подождать загрузки всех необходимых элементов"):
             WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "h1")))
-        print("пришли в метод get_board_info")
+
         with allure.step("получить название доски"):
             return self.__driver.find_element(By.CSS_SELECTOR, "h1").get_property('textContent')
 
@@ -48,7 +47,7 @@ class BoardPage:
     def delete_board_ui(self) -> None:
         with allure.step("подождать загрузки всех необходимых элементов"):
             WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button[aria-label=\"Меню\"]")))
-        # нажать кнопку с тремя точками справа
+
         with allure.step("нажать кнопку \"Меню\""):
             self.__driver.find_element(By.CSS_SELECTOR, "button[aria-label=\"Меню\"]").click()
 
@@ -84,10 +83,6 @@ class BoardPage:
 
         with allure.step("нажать кнопку \"Добавить список\""):
             self.__driver.find_element(By.CSS_SELECTOR, ".js-save-edit").click()
-
-        # # нажать кнопку ENTER
-        # with allure.step("нажать кнопку ENTER"):        
-        #   self.__driver.find_element(By.CSS_SELECTOR, ".js-save-edit").send_keys(Keys.ENTER)
 
 
     @allure.step("Создать два списка:")   

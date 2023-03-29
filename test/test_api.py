@@ -2,90 +2,103 @@ import allure
 from api.BoardAPI import BoardAPI
 from api.CardAPI import CardAPI
 
-
-def test_create_board(api_client: BoardAPI, delete_board: dict, test_data: dict):
-    with allure.step("Получить id организации"):
+@allure.epic("Автоматизация тестов для проверки работы с досками и карточками в сервисе Trello")
+@allure.suite("API-тесты")
+class TrelloTestAPI:
+    @allure.story("Поучение информации о сотрудниках")
+    @allure.title("Получение полного списка всех сотрудников одной компании")
+    @allure.description("Проверка работы GET-запроса на получение полного списка\
+                        сотрудников одной компании по id компании")
+    @allure.feature("GET")
+    @allure.severity("critical")
+    @allure.id("API-1")    
+    def test_create_board(self, api_client: BoardAPI, delete_board: dict, test_data: dict):
         org_id = test_data.get("org_id")
+        board_name = test_data.get("board_name")
 
-    board_list_before = api_client.get_all_boards_by_org_id(org_id)
+        board_list_before = api_client.get_all_boards_by_org_id(org_id)
 
-    resp = api_client.create_board("New board to be deleted")
+        resp = api_client.create_board(board_name)
 
-    delete_board["board_id"] = resp.get("id")
+        delete_board["board_id"] = resp.get("id")
 
-    board_list_after = api_client.get_all_boards_by_org_id(org_id)
+        board_list_after = api_client.get_all_boards_by_org_id(org_id)
 
-    with allure.step("Проверить, что количество досок стало больше на 1"):
-        assert len(board_list_after) - len(board_list_before) == 1
+        with allure.step("Проверить, что количество досок стало больше на 1"):
+            assert len(board_list_after) - len(board_list_before) == 1
 
 
-def test_delete_board(api_client: BoardAPI, dummy_board_id: str, test_data: dict):
-    with allure.step("Получить id организации"):
+    def test_delete_board(self, api_client: BoardAPI, dummy_board_id: str, test_data: dict):
         org_id = test_data.get("org_id")
-    
-    board_list_before = api_client.get_all_boards_by_org_id(org_id)
+        
+        board_list_before = api_client.get_all_boards_by_org_id(org_id)
 
-    api_client.delete_board_by_id(dummy_board_id)
+        api_client.delete_board_by_id(dummy_board_id)
 
-    board_list_after = api_client.get_all_boards_by_org_id(org_id)
+        board_list_after = api_client.get_all_boards_by_org_id(org_id)
 
-    with allure.step("Проверить, что количество досок стало меньше на 1"):
-        assert len(board_list_before) - len(board_list_after) == 1
-
-
-def test_create_card(api_card_client: CardAPI, lists_on_board: dict):
-    cards_on_list_before = api_card_client.get_cards_by_list_id(lists_on_board["list_one_id"])
-
-    created_card = api_card_client.create_card(lists_on_board["list_one_id"], "New card")
-
-    new_card_info = api_card_client.get_card_info(created_card["id"])
-
-    cards_on_list_after = api_card_client.get_cards_by_list_id(lists_on_board["list_one_id"])
-
-    with allure.step("Проверить, что карточка создалась:"):
-        with allure.step("количество карточек стало больше на 1"):
-            assert len(cards_on_list_after) - len(cards_on_list_before) == 1
-        with allure.step("название новой карточки совпадает с заданным названием"):
-            assert new_card_info["name"] == "New card"
-        with allure.step("карточка находится в той колонке, в которую её добавляли"):
-            assert lists_on_board["list_one_id"] == new_card_info["idList"]
+        with allure.step("Проверить, что количество досок стало меньше на 1"):
+            assert len(board_list_before) - len(board_list_after) == 1
 
 
-def test_update_card(api_card_client: CardAPI, dummy_card_id: str, test_data: dict):
-    api_card_client.get_card_info(dummy_card_id)
+    def test_create_card(self, api_card_client: CardAPI, lists_on_board: dict, test_data: dict):
+        card_name = test_data.get("card_name")
 
-    api_card_client.update_card(dummy_card_id, test_data.get("card_new_name"), test_data.get("card_new_description"))
+        cards_on_list_before = api_card_client.get_cards_by_list_id(lists_on_board["list_one_id"])
 
-    updated_card_info = api_card_client.get_card_info(dummy_card_id)
+        created_card = api_card_client.create_card(lists_on_board["list_one_id"], card_name)
 
-    with allure.step("Проверить, что данные карточки изменились:"):
-        with allure.step("новое название соответствует заданному"):
-            assert updated_card_info["name"] == test_data.get("card_new_name")
-        with allure.step("новое описание соответствует заданному"):
-            assert updated_card_info["desc"] == test_data.get("card_new_description")
+        new_card_info = api_card_client.get_card_info(created_card["id"])
 
+        cards_on_list_after = api_card_client.get_cards_by_list_id(lists_on_board["list_one_id"])
 
-def test_move_card(api_card_client: CardAPI, dummy_card_id: str, get_lists_on_board_by_dummy_card_id: dict):
-    api_card_client.get_card_info(dummy_card_id)
-
-    future_list_id = get_lists_on_board_by_dummy_card_id['list_two_id']
-
-    api_card_client.move_one_card(dummy_card_id, future_list_id)
-
-    moved_card_info = api_card_client.get_card_info(dummy_card_id)
-
-    with allure.step("Проверить, что карточка переместилась в другую колонку"):
-        assert moved_card_info["idList"] == future_list_id
+        with allure.step("Проверить, что карточка создалась:"):
+            with allure.step("количество карточек стало больше на 1"):
+                assert len(cards_on_list_after) - len(cards_on_list_before) == 1
+            with allure.step("название новой карточки совпадает с заданным названием"):
+                assert new_card_info["name"] == card_name
+            with allure.step("карточка находится в той колонке, в которую её добавляли"):
+                assert lists_on_board["list_one_id"] == new_card_info["idList"]
 
 
-def test_delete_card(api_card_client: CardAPI, dummy_card_id: str, get_lists_on_board_by_dummy_card_id: dict):
-    lists_on_board = get_lists_on_board_by_dummy_card_id["list_one_id"]
+    def test_update_card(self, api_card_client: CardAPI, dummy_card_id: str, test_data: dict):
+        new_name = test_data.get("new_data")["card_new_name"]
+        new_description = test_data.get("new_data")["card_new_description"]        
 
-    cards_before = api_card_client.get_cards_by_list_id(lists_on_board)
+        api_card_client.get_card_info(dummy_card_id)
 
-    api_card_client.delete_card(dummy_card_id)
+        api_card_client.update_card(dummy_card_id, new_name, new_description)
 
-    cards_after = api_card_client.get_cards_by_list_id(lists_on_board)
+        updated_card_info = api_card_client.get_card_info(dummy_card_id)
 
-    with allure.step("Проверить, что карточек в колонке стало меньше на 1"):
-        assert len(cards_before) - len(cards_after) == 1
+        with allure.step("Проверить, что данные карточки изменились:"):
+            with allure.step("новое название соответствует заданному"):
+                assert updated_card_info["name"] == new_name
+            with allure.step("новое описание соответствует заданному"):
+                assert updated_card_info["desc"] == new_description
+
+
+    def test_move_card(self, api_card_client: CardAPI, dummy_card_id: str, get_lists_on_board_by_dummy_card_id: dict):
+        api_card_client.get_card_info(dummy_card_id)
+
+        future_list_id = get_lists_on_board_by_dummy_card_id['list_two_id']
+
+        api_card_client.move_one_card(dummy_card_id, future_list_id)
+
+        moved_card_info = api_card_client.get_card_info(dummy_card_id)
+
+        with allure.step("Проверить, что карточка переместилась в другую колонку"):
+            assert moved_card_info["idList"] == future_list_id
+
+
+    def test_delete_card(self, api_card_client: CardAPI, dummy_card_id: str, get_lists_on_board_by_dummy_card_id: dict):
+        lists_on_board = get_lists_on_board_by_dummy_card_id["list_one_id"]
+
+        cards_before = api_card_client.get_cards_by_list_id(lists_on_board)
+
+        api_card_client.delete_card(dummy_card_id)
+
+        cards_after = api_card_client.get_cards_by_list_id(lists_on_board)
+
+        with allure.step("Проверить, что карточек в колонке стало меньше на 1"):
+            assert len(cards_before) - len(cards_after) == 1

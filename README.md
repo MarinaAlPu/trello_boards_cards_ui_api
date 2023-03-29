@@ -1,6 +1,6 @@
 # trello_boards_cards_ui_api
 
-## Автоматизация UI и API-тестов для работы с досками и карточками в сервисе Trello (Python)
+## Автоматизация UI и API-тестов для проверки работы с досками и карточками в сервисе Trello (Python)
 
 ### Шаги
 1. Клонировать проект командой `git clone https://github.com/MarinaAlPu/trello_boards_cards_ui_api.git`

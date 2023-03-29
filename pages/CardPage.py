@@ -9,7 +9,6 @@ from configuration.ConfigProvider import ConfigProvider
 from testdata.DataProvider import DataProvider
 
 class CardPage:
-
     def __init__(self, driver: WebDriver) -> None:
         self.__driver = driver
         self.data = DataProvider()
@@ -24,7 +23,7 @@ class CardPage:
     def get_card_info_before_update(self):
         data_before = {"name": "",
                        "description": ""}
-        with allure.step("открыть карточку, нажав на неё"):
+        with allure.step("открыть карточку"):
             self.__driver.find_element(By.CSS_SELECTOR, ".js-card-name").click()
 
         with allure.step("получить название карточки"):
@@ -46,13 +45,13 @@ class CardPage:
     
     @allure.step("Получить данные карточки ПОСЛЕ изменения информации:")
     def get_card_info_after_update(self):
-        with allure.step("открыть карточку, нажав на неё"):
+        with allure.step("открыть карточку"):
             self.__driver.find_element(By.CSS_SELECTOR, ".js-card-details").click()
 
-        with allure.step("извлечь название карточки"):
+        with allure.step("получить название карточки"):
             card_name = self.__driver.find_element(By.CSS_SELECTOR, '#js-dialog-title').get_property('textContent')
 
-        with allure.step("извлечь описание карточки"):
+        with allure.step("получить описание карточки"):
             card_description = self.__driver.find_element(By.CSS_SELECTOR, '.js-desc').text
 
         data_after = {"name": card_name,
@@ -90,7 +89,7 @@ class CardPage:
         with allure.step("нажать кнопку \"Сохранить\""):
             self.__driver.find_element(By.CSS_SELECTOR, 'input[value=Сохранить]:first-child').click()
 
-        with allure.step("закрыть карточку нажатием на \"крестик\" в правом верхнем углу"):
+        with allure.step("закрыть карточку"):
             self.__driver.find_element(By.CSS_SELECTOR, 'a[aria-label="Закрыть диалоговое окно"]').click()
 
 
@@ -108,7 +107,7 @@ class CardPage:
 
     @allure.step("Получить список, в котором находится открытая карточка:")
     def get_list_of_card(self):
-        with allure.step("открыть карточку, нажав на неё"):
+        with allure.step("открыть карточку"):
             self.__driver.find_element(By.CSS_SELECTOR, ".js-card-name").click()
 
         with allure.step("получить название списка, в котором находится карточка"):
@@ -122,16 +121,15 @@ class CardPage:
     @allure.step("Получить название списка карточки ДО перемещения:")
     def get_card_list_before_moving(self):
 
-        with allure.step("открыть карточку, нажав на неё"):
+        with allure.step("открыть карточку"):
             self.__driver.find_element(By.CSS_SELECTOR, ".js-card-name").click()
 
         with allure.step("подождать загрузки всех необходимых элементов"):
-            WebDriverWait(self.__driver, 15).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.js-open-move-from-header')))
+            WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.js-open-move-from-header')))
         
         with allure.step("получить название списка карточки"):
             list_name_before = self.__driver.find_element(By.CSS_SELECTOR, '.js-open-move-from-header').text
-        print("\nназвание списка карточки до перемещения")
-        print(list_name_before)
+
         with allure.step("закрыть карточку"):
             self.__driver.find_element(By.CSS_SELECTOR, '.js-close-window').click()
 
@@ -140,16 +138,13 @@ class CardPage:
     
     @allure.step("Получить название списка карточки ПОСЛЕ перемещения:")
     def get_card_list_after_moving(self):
-        with allure.step("открыть карточку, нажав на неё"):
+        with allure.step("открыть карточку"):
             self.__driver.find_element(By.CSS_SELECTOR, ".js-card-name").click()
 
         with allure.step("получить название списка карточки"):
             list_name_after = self.__driver.find_element(By.CSS_SELECTOR, '.js-open-move-from-header').text
 
-        print("\nназвание списка карточки после перемещения")
-        print(list_name_after)
         with allure.step("закрыть карточку"):
             self.__driver.find_element(By.CSS_SELECTOR, '.js-close-window').click()
 
-        print("\nзакрыли карточку и пошли в фикстуру")
         return list_name_after

@@ -12,12 +12,12 @@ from user_data.UserProvider import UserProvider
 @allure.epic("Автоматизация тестов для проверки работы с досками и карточками в сервисе Trello")
 @allure.suite("UI-тесты")
 class TrelloTestUI:
-    @allure.story("Доски")
-    @allure.title("Создание доски")
-    @allure.description("Проверка создания новой доски по id организации")
+    @allure.story("Авторизация")
+    # @allure.title("Создание доски")
+    # @allure.description("Проверка создания новой доски по id организации")
     # @allure.feature("GET")
-    @allure.severity("critical")
-    @allure.id("UI-1")    
+    @allure.severity("Blocker")
+    @allure.id("UI-0")
     # @pytest.mark.skip()
     # def auth_test(self, browser):#, test_data: dict
     #     username = UserProvider().get("user", "username")
@@ -43,6 +43,12 @@ class TrelloTestUI:
     #             assert info[1] == email
 
 
+    @allure.story("Доски")
+    @allure.title("Создание доски")
+    @allure.description("Проверка создания новой доски")
+    # @allure.feature("GET")
+    @allure.severity("Critical")
+    @allure.id("UI-1")
     def create_board_test(self, browser, for_create_board, test_data: dict):
         board_name = test_data.get("board_name")
 
@@ -66,6 +72,12 @@ class TrelloTestUI:
             assert info == board_name
 
 
+    @allure.story("Доски")
+    @allure.title("Удаление доски")
+    @allure.description("Проверка удаления существующей доски")
+    # @allure.feature("GET")
+    @allure.severity("Critical")
+    @allure.id("UI-2")
     def delete_board_test(self, browser, for_delete_board):
         main_page = MainPage(browser)
         
@@ -84,6 +96,12 @@ class TrelloTestUI:
             assert boards_before - boards_after == 1   
         
 
+    @allure.story("Карточки")
+    @allure.title("Создание карточки")
+    @allure.description("Проверка создания новой карточки")
+    # @allure.feature("GET")
+    @allure.severity("Critical")
+    @allure.id("UI-3")
     def create_card_test(self, browser, dummy_board_for_ui: str, test_data: dict):
         card_name = test_data.get("card_name")
 
@@ -104,22 +122,12 @@ class TrelloTestUI:
                 assert new_card_name == card_name   
 
 
-    def delete_card_test(self, browser, card_to_delete):
-        list_page = ListPage(browser)
-        with allure.step("Посчитать количество карточек в колонке ДО удаления карточки"):
-            cards_on_list_before = list_page.get_cards_on_list()
-
-        card_page = CardPage(browser)
-        card_page.delete_card()
-
-        with allure.step("Посчитать количество карточек в колонке ПОСЛЕ удаления карточки"):
-            cards_on_list_after = list_page.get_cards_on_list()
-
-        with allure.step("Проверить, что карточка удалилась:"):
-            with allure.step("количество карточек в колонке стало меньше на 1"):
-                assert len(cards_on_list_before) - len(cards_on_list_after) == 1
-
-
+    @allure.story("Карточки")
+    @allure.title("Редактирование карточки")
+    @allure.description("Проверка редактирования данных карточки")
+    # @allure.feature("GET")
+    @allure.severity("Normal")
+    @allure.id("UI-4")
     def update_card_test(self, browser, test_data: dict, card_to_delete):
         new_name = test_data.get("new_data")["card_new_name"]
         new_description = test_data.get("new_data")["card_new_description"]
@@ -136,6 +144,12 @@ class TrelloTestUI:
                 assert card_description_after == new_description   
 
 
+    @allure.story("Карточки")
+    @allure.title("Перемещение карточки")
+    @allure.description("Проверка перемещения карточки из одной колонки в другую")
+    # @allure.feature("GET")
+    @allure.severity("Critical")
+    @allure.id("UI-5")
     def move_card_test(self, browser, dummy_board_for_moving):
         list_page = ListPage(browser)
         card_page = CardPage(browser)
@@ -148,3 +162,25 @@ class TrelloTestUI:
 
         with allure.step("Проверить, что название колонки, в которой находится карточка, изменилось"):
             assert list_of_card_after != list_of_card_before
+
+
+    @allure.story("Карточки")
+    @allure.title("Удаление карточки")
+    @allure.description("Проверка удаления существующей карточки")
+    # @allure.feature("GET")
+    @allure.severity("Critical")
+    @allure.id("UI-6")
+    def delete_card_test(self, browser, card_to_delete):
+        list_page = ListPage(browser)
+        with allure.step("Посчитать количество карточек в колонке ДО удаления карточки"):
+            cards_on_list_before = list_page.get_cards_on_list()
+
+        card_page = CardPage(browser)
+        card_page.delete_card()
+
+        with allure.step("Посчитать количество карточек в колонке ПОСЛЕ удаления карточки"):
+            cards_on_list_after = list_page.get_cards_on_list()
+
+        with allure.step("Проверить, что карточка удалилась:"):
+            with allure.step("количество карточек в колонке стало меньше на 1"):
+                assert len(cards_on_list_before) - len(cards_on_list_after) == 1

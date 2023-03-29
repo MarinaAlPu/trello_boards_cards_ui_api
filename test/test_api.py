@@ -5,13 +5,12 @@ from api.CardAPI import CardAPI
 @allure.epic("Автоматизация тестов для проверки работы с досками и карточками в сервисе Trello")
 @allure.suite("API-тесты")
 class TrelloTestAPI:
-    @allure.story("Поучение информации о сотрудниках")
-    @allure.title("Получение полного списка всех сотрудников одной компании")
-    @allure.description("Проверка работы GET-запроса на получение полного списка\
-                        сотрудников одной компании по id компании")
-    @allure.feature("GET")
-    @allure.severity("critical")
-    @allure.id("API-1")    
+    @allure.story("Доски")
+    @allure.title("Создание доски")
+    @allure.description("Проверка создания новой доски по id организации")
+    # @allure.feature("GET")
+    @allure.severity("Critical")
+    @allure.id("API-1")   
     def test_create_board(self, api_client: BoardAPI, delete_board: dict, test_data: dict):
         org_id = test_data.get("org_id")
         board_name = test_data.get("board_name")
@@ -28,6 +27,12 @@ class TrelloTestAPI:
             assert len(board_list_after) - len(board_list_before) == 1
 
 
+    @allure.story("Доски")
+    @allure.title("Удаление доски")
+    @allure.description("Проверка удаления существующей доски по id")
+    # @allure.feature("GET")
+    @allure.severity("Critical")
+    @allure.id("API-2")  
     def test_delete_board(self, api_client: BoardAPI, dummy_board_id: str, test_data: dict):
         org_id = test_data.get("org_id")
         
@@ -41,6 +46,12 @@ class TrelloTestAPI:
             assert len(board_list_before) - len(board_list_after) == 1
 
 
+    @allure.story("Карточки")
+    @allure.title("Создание карточки")
+    @allure.description("Проверка создания новой карточки по id колонки")
+    # @allure.feature("GET")
+    @allure.severity("Critical")
+    @allure.id("API-3") 
     def test_create_card(self, api_card_client: CardAPI, lists_on_board: dict, test_data: dict):
         card_name = test_data.get("card_name")
 
@@ -61,6 +72,12 @@ class TrelloTestAPI:
                 assert lists_on_board["list_one_id"] == new_card_info["idList"]
 
 
+    @allure.story("Карточки")
+    @allure.title("Редактирование карточки")
+    @allure.description("Проверка редактирования карточки")
+    # @allure.feature("GET")
+    @allure.severity("Critical")
+    @allure.id("API-4") 
     def test_update_card(self, api_card_client: CardAPI, dummy_card_id: str, test_data: dict):
         new_name = test_data.get("new_data")["card_new_name"]
         new_description = test_data.get("new_data")["card_new_description"]        
@@ -77,7 +94,12 @@ class TrelloTestAPI:
             with allure.step("новое описание соответствует заданному"):
                 assert updated_card_info["desc"] == new_description
 
-
+    @allure.story("Карточки")
+    @allure.title("Перемещение карточки")
+    @allure.description("Проверка перемещения карточки из одной колонки в другую")
+    # @allure.feature("GET")
+    @allure.severity("Critical")
+    @allure.id("API-5")
     def test_move_card(self, api_card_client: CardAPI, dummy_card_id: str, get_lists_on_board_by_dummy_card_id: dict):
         api_card_client.get_card_info(dummy_card_id)
 
@@ -90,7 +112,12 @@ class TrelloTestAPI:
         with allure.step("Проверить, что карточка переместилась в другую колонку"):
             assert moved_card_info["idList"] == future_list_id
 
-
+    @allure.story("Карточки")
+    @allure.title("Удаление карточки")
+    @allure.description("Проверка удаления существующей карточки по id")
+    # @allure.feature("GET")
+    @allure.severity("Critical")
+    @allure.id("API-6")
     def test_delete_card(self, api_card_client: CardAPI, dummy_card_id: str, get_lists_on_board_by_dummy_card_id: dict):
         lists_on_board = get_lists_on_board_by_dummy_card_id["list_one_id"]
 

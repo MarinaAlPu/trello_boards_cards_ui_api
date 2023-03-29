@@ -16,38 +16,6 @@ class AuthPage:
         url = ConfigProvider().get("ui", "base_url")
         self.__url = url + "/login"
         self.__driver = driver
-        
-    def set_token(self):
-        token = UserProvider().get_user_token("user", "token")
-        with allure.step("Авторизоваться"):
-            # открыть хром
-            browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-
-            # зайти на главную страницу
-            self.__driver.get("https://trello.com/")
-        
-        # положить токен
-            cookie = {
-                'name' : 'token',
-                'value' : token
-            }
-            self.__driver.add_cookie(cookie) 
-            
-        # зайти на нужную страницу
-            self.__driver.get(ConfigProvider().get("ui", "url_for_token"))
-
-# from selenium.webdriver import Chrome
-# from selenium.webdriver.common.by import By
-        # # открыть хром
-        # driver = Chrome() 
-        # driver.implicitly\_wait(4) 
-        # # зайти на главную страницу
-        # driver.get("https://trello.com/")
-        # # положить токен
-        # driver.add\_cookie({'name': 'token', 'value': 'вот тут токен'}) 
-        # # зайти на нужную страницу
-        # driver.get("ваша ссылка")
-
 
 
     @allure.step("Открыть страницу авторизации")

@@ -61,17 +61,13 @@ def api_client_for_ui() -> ApiForUI:
     
 
 @pytest.fixture
-def auth_for_ui(browser):#, user_data: dict, api_client_for_ui: ApiForUI
+def auth_for_ui(browser):
     email = UserProvider().get("user", "email")
     password = UserProvider().get("user", "password")
-    # with allure.step("Авторизоваться"):
-    #     token = test_data.get("token")
 
     auth_page = AuthPage(browser)
     auth_page.go()
     auth_page.login_as(email, password)
-
-        # auth_page.set_token(token)
     
 
 @pytest.fixture

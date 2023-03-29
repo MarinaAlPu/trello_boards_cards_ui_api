@@ -35,8 +35,6 @@ class ApiForUI:
         path = "{trello}/boards/{board_id}".format(trello = self.base_url, board_id = id)
         resp = requests.delete(path, json = cookie, cookies = cookie)
 
-        return resp.json()
-
 
     @allure.step("Получить список колонок на доске {id}")
     def get_lists_by_board_id(self, id: str) -> list:

@@ -12,41 +12,39 @@ from user_data.UserProvider import UserProvider
 @allure.epic("Автоматизация тестов для проверки работы с досками и карточками в сервисе Trello")
 @allure.suite("UI-тесты")
 class TrelloTestUI:
-    @allure.story("Авторизация")
-    # @allure.title("Создание доски")
-    # @allure.description("Проверка создания новой доски по id организации")
-    # @allure.feature("GET")
-    @allure.severity("Blocker")
-    @allure.id("UI-0")
-    # @pytest.mark.skip()
-    # def auth_test(self, browser):#, test_data: dict
-    #     username = UserProvider().get("user", "username")
-    #     email = UserProvider().get("user", "email")
-    #     password = UserProvider().get("user", "password")
+    # @allure.story("Авторизация")
+    # # @allure.title("Создание доски")
+    # # @allure.description("Проверка создания новой доски по id организации")
+    # @allure.severity("Blocker")
+    # @allure.id("UI-0")
+    # # @pytest.mark.skip()
+    # # def auth_test(self, browser):#, test_data: dict
+    # #     username = UserProvider().get("user", "username")
+    # #     email = UserProvider().get("user", "email")
+    # #     password = UserProvider().get("user", "password")
 
-    #     auth_page = AuthPage(browser)
-    #     auth_page.go()
-    #     auth_page.login_as(email, password)
+    # #     auth_page = AuthPage(browser)
+    # #     auth_page.go()
+    # #     auth_page.login_as(email, password)
 
-    #     main_page = MainPage(browser)
-    #     main_page.open_menu()
-    #     info = main_page.get_account_info()
+    # #     main_page = MainPage(browser)
+    # #     main_page.open_menu()
+    # #     info = main_page.get_account_info()
 
-    #     current_url = main_page.get_current_url()
-    #     with allure.step("Проверить, что URL " + current_url + " заканчивается на kahajow976/boards"):
-    #         assert current_url.endswith("kahajow976/boards")
+    # #     current_url = main_page.get_current_url()
+    # #     with allure.step("Проверить, что URL " + current_url + " заканчивается на kahajow976/boards"):
+    # #         assert current_url.endswith("kahajow976/boards")
 
-    #     with allure.step("Проверить, что в меню \"УЧЁТНАЯ ЗАПИСЬ\" указаны данные пользователя:"):
-    #         with allure.step("Имя пользователя должно быть: " + username):
-    #             assert info[0] == username
-    #         with allure.step("Электронная почта пользователя должна быть: " + email):
-    #             assert info[1] == email
+    # #     with allure.step("Проверить, что в меню \"УЧЁТНАЯ ЗАПИСЬ\" указаны данные пользователя:"):
+    # #         with allure.step("Имя пользователя должно быть: " + username):
+    # #             assert info[0] == username
+    # #         with allure.step("Электронная почта пользователя должна быть: " + email):
+    # #             assert info[1] == email
 
 
     @allure.story("Доски")
     @allure.title("Создание доски")
     @allure.description("Проверка создания новой доски")
-    # @allure.feature("GET")
     @allure.severity("Critical")
     @allure.id("UI-1")
     def create_board_test(self, browser, for_create_board, test_data: dict):
@@ -75,7 +73,6 @@ class TrelloTestUI:
     @allure.story("Доски")
     @allure.title("Удаление доски")
     @allure.description("Проверка удаления существующей доски")
-    # @allure.feature("GET")
     @allure.severity("Critical")
     @allure.id("UI-2")
     def delete_board_test(self, browser, for_delete_board):
@@ -99,12 +96,10 @@ class TrelloTestUI:
     @allure.story("Карточки")
     @allure.title("Создание карточки")
     @allure.description("Проверка создания новой карточки")
-    # @allure.feature("GET")
     @allure.severity("Critical")
     @allure.id("UI-3")
     def create_card_test(self, browser, dummy_board_for_ui: str, test_data: dict):
         card_name = test_data.get("card_name")
-
         list_page = ListPage(browser)
         with allure.step("Посчитать количество карточек в колонке ДО добавления новой карточки"):
             cards_on_list_before = list_page.get_cards_on_list()
@@ -147,7 +142,6 @@ class TrelloTestUI:
     @allure.story("Карточки")
     @allure.title("Перемещение карточки")
     @allure.description("Проверка перемещения карточки из одной колонки в другую")
-    # @allure.feature("GET")
     @allure.severity("Critical")
     @allure.id("UI-5")
     def move_card_test(self, browser, dummy_board_for_moving):
@@ -167,7 +161,6 @@ class TrelloTestUI:
     @allure.story("Карточки")
     @allure.title("Удаление карточки")
     @allure.description("Проверка удаления существующей карточки")
-    # @allure.feature("GET")
     @allure.severity("Critical")
     @allure.id("UI-6")
     def delete_card_test(self, browser, card_to_delete):

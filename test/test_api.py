@@ -8,7 +8,6 @@ class TrelloTestAPI:
     @allure.story("Доски")
     @allure.title("Создание доски")
     @allure.description("Проверка создания новой доски по id организации")
-    # @allure.feature("GET")
     @allure.severity("Critical")
     @allure.id("API-1")   
     def test_create_board(self, api_client: BoardAPI, delete_board: dict, test_data: dict):
@@ -30,7 +29,6 @@ class TrelloTestAPI:
     @allure.story("Доски")
     @allure.title("Удаление доски")
     @allure.description("Проверка удаления существующей доски по id")
-    # @allure.feature("GET")
     @allure.severity("Critical")
     @allure.id("API-2")  
     def test_delete_board(self, api_client: BoardAPI, dummy_board_id: str, test_data: dict):
@@ -49,7 +47,6 @@ class TrelloTestAPI:
     @allure.story("Карточки")
     @allure.title("Создание карточки")
     @allure.description("Проверка создания новой карточки по id колонки")
-    # @allure.feature("GET")
     @allure.severity("Critical")
     @allure.id("API-3") 
     def test_create_card(self, api_card_client: CardAPI, lists_on_board: dict, test_data: dict):
@@ -75,7 +72,6 @@ class TrelloTestAPI:
     @allure.story("Карточки")
     @allure.title("Редактирование карточки")
     @allure.description("Проверка редактирования карточки")
-    # @allure.feature("GET")
     @allure.severity("Critical")
     @allure.id("API-4") 
     def test_update_card(self, api_card_client: CardAPI, dummy_card_id: str, test_data: dict):
@@ -97,7 +93,6 @@ class TrelloTestAPI:
     @allure.story("Карточки")
     @allure.title("Перемещение карточки")
     @allure.description("Проверка перемещения карточки из одной колонки в другую")
-    # @allure.feature("GET")
     @allure.severity("Critical")
     @allure.id("API-5")
     def test_move_card(self, api_card_client: CardAPI, dummy_card_id: str, get_lists_on_board_by_dummy_card_id: dict):
@@ -115,7 +110,6 @@ class TrelloTestAPI:
     @allure.story("Карточки")
     @allure.title("Удаление карточки")
     @allure.description("Проверка удаления существующей карточки по id")
-    # @allure.feature("GET")
     @allure.severity("Critical")
     @allure.id("API-6")
     def test_delete_card(self, api_card_client: CardAPI, dummy_card_id: str, get_lists_on_board_by_dummy_card_id: dict):

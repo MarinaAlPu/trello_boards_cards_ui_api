@@ -170,9 +170,10 @@ def api_client_no_auth() -> BoardAPI:
 
 
 @pytest.fixture
-def dummy_board_id(api_client: BoardAPI) -> str:    
+def dummy_board_id(api_client: BoardAPI, test_data: dict) -> str:
+    card_name = test_data.get("card_name")
     with allure.step("Создать доску. Количество колонок по умолчанию - три"):
-        resp = api_client.create_board("Board to be deleted").get("id")
+        resp = api_client.create_board(card_name).get("id")
         return resp
 
 
@@ -189,9 +190,10 @@ def delete_board(api_client: BoardAPI) -> str:
 
 
 @pytest.fixture
-def dummy_board(api_client: BoardAPI) -> str:
+def dummy_board(api_client: BoardAPI, test_data: dict) -> str:
+    card_name = test_data.get("card_name")
     with allure.step("Создать доску. Количество колонок по умолчанию - три"):
-        resp = api_client.create_board("Board to be deleted").get("id")
+        resp = api_client.create_board(card_name).get("id")
 
         yield resp
 
@@ -222,11 +224,12 @@ def api_card_client() -> CardAPI:
 
 
 @pytest.fixture
-def dummy_card_id(api_card_client: CardAPI, lists_on_board: dict) -> str:
+def dummy_card_id(api_card_client: CardAPI, lists_on_board: dict, test_data: dict) -> str:
     list_one_id = lists_on_board['list_one_id']
+    card_name = test_data.get("card_name")
 
     with allure.step("Создать карточку"):
-        resp = api_card_client.create_card(list_one_id, "Card to be update and deleted").get("id")
+        resp = api_card_client.create_card(list_one_id, card_name).get("id")
 
         return resp
 

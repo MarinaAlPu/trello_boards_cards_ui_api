@@ -15,12 +15,12 @@ class CardPage:
         url = ConfigProvider().get("ui", "base_url")
 
     @allure.step("Получить имя карточки:")
-    def get_card_name(self):
+    def get_card_name(self) -> str:
         return self.__driver.find_element(By.CSS_SELECTOR, ".js-card-details").text
 
 
     @allure.step("Получить данные карточки ДО изменения информации:")
-    def get_card_info_before_update(self):
+    def get_card_info_before_update(self) -> dict:
         data_before = {"name": "",
                        "description": ""}
         with allure.step("открыть карточку"):
@@ -44,7 +44,7 @@ class CardPage:
 
     
     @allure.step("Получить данные карточки ПОСЛЕ изменения информации:")
-    def get_card_info_after_update(self):
+    def get_card_info_after_update(self) -> dict:
         with allure.step("открыть карточку"):
             self.__driver.find_element(By.CSS_SELECTOR, ".js-card-details").click()
 
@@ -106,7 +106,7 @@ class CardPage:
 
 
     @allure.step("Получить список, в котором находится открытая карточка:")
-    def get_list_of_card(self):
+    def get_list_of_card(self) -> str:
         with allure.step("открыть карточку"):
             self.__driver.find_element(By.CSS_SELECTOR, ".js-card-name").click()
 
@@ -119,7 +119,7 @@ class CardPage:
         
 
     @allure.step("Получить название списка карточки ДО перемещения:")
-    def get_card_list_before_moving(self):
+    def get_card_list_before_moving(self) -> str:
 
         with allure.step("открыть карточку"):
             self.__driver.find_element(By.CSS_SELECTOR, ".js-card-name").click()
@@ -137,7 +137,7 @@ class CardPage:
 
     
     @allure.step("Получить название списка карточки ПОСЛЕ перемещения:")
-    def get_card_list_after_moving(self):
+    def get_card_list_after_moving(self) -> str:
         with allure.step("открыть карточку"):
             self.__driver.find_element(By.CSS_SELECTOR, ".js-card-name").click()
 

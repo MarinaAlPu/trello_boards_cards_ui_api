@@ -21,13 +21,13 @@ from api.BoardAPI import BoardAPI
 from api.CardAPI import CardAPI
 
 @pytest.fixture
-def test_data():
+def test_data() -> DataProvider:
     with allure.step("Получить тестовые данные"):
         return DataProvider()
     
 
 @pytest.fixture
-def user_data():
+def user_data() -> UserProvider:
     with allure.step("Получить данные пользователя"):
         return UserProvider()
     
@@ -75,7 +75,7 @@ def auth_for_ui(browser):#, user_data: dict, api_client_for_ui: ApiForUI
     
 
 @pytest.fixture
-def for_delete_board(auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
+def for_delete_board(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
     board_name = test_data.get("board_name")
     api_client_for_ui.create_board(board_name)
 

@@ -21,17 +21,17 @@ class MainPage:
     #     self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid=header-member-menu-button]").click()        
 
 
-    @allure.step("Прочитать информацию о пользователе")
-    def get_account_info(self) -> list[str]:
-        container = self.__driver.find_element(By.CSS_SELECTOR, "div[data-testid=account-menu]>div>div:last-child")
-        fields = container.find_elements(By.CSS_SELECTOR, "div")
-        name = fields[0].text
-        email = fields[1].text
+    # @allure.step("Прочитать информацию о пользователе")
+    # def get_account_info(self) -> list[str]:
+    #     container = self.__driver.find_element(By.CSS_SELECTOR, "div[data-testid=account-menu]>div>div:last-child")
+    #     fields = container.find_elements(By.CSS_SELECTOR, "div")
+    #     name = fields[0].text
+    #     email = fields[1].text
 
-        return [name, email]
+    #     return [name, email]
 
 
-    def get_boards_before_add_board(self) -> list[str]:
+    def get_boards_before_add_board(self) -> int:
         with allure.step("подождать загрузки всех необходимых элементов"):
             WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.board-tile-details-name")))
 
@@ -41,7 +41,7 @@ class MainPage:
             return len(fields)
 
 
-    def get_boards_after_add_board(self) -> list[str]:
+    def get_boards_after_add_board(self) -> int:
         with allure.step("нажать кнопку \"Рабочее простанство Trello\" и перейти в Рабочее простанство Trello"):
             self.__driver.find_element(By.XPATH, '//p[text()="Рабочее пространство Trello"]').click()
 
@@ -54,7 +54,7 @@ class MainPage:
             return len(fields)
         
 
-    def get_boards_before_delete(self) -> list[str]:
+    def get_boards_before_delete(self) -> int:
         with allure.step("подождать загрузки всех необходимых элементов"):
             WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'div[title="New board"]')))
 
@@ -64,7 +64,7 @@ class MainPage:
             return len(fields)
 
 
-    def get_boards_after_delete(self) -> list[str]:
+    def get_boards_after_delete(self) -> int:
         with allure.step("посчитать количество досок"):
             fields = self.__driver.find_elements(By.CSS_SELECTOR, "div.board-tile-details-name")
 

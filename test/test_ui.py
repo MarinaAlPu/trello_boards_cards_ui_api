@@ -1,5 +1,4 @@
 import allure
-from pages.AuthPage import AuthPage
 from pages.MainPage import MainPage
 from pages.BoardPage import BoardPage
 from pages.ListPage import ListPage

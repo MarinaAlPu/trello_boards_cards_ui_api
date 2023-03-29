@@ -10,7 +10,6 @@ from user_data.UserProvider import UserProvider
 from testdata.DataProvider import DataProvider
 from configuration.ConfigProvider import ConfigProvider
 
-from pages.AuthPage import AuthPage
 from pages.MainPage import MainPage
 from pages.BoardPage import BoardPage
 from pages.ListPage import ListPage
@@ -37,6 +36,9 @@ def browser():
     with allure.step("Открыть и настроить браузер"):
         timeout = ConfigProvider().get("ui", "timeout")
         browser_name = ConfigProvider().get("ui", "browser_name")
+        base_url = ConfigProvider().get("ui", "base_url")
+        url_for_token = ConfigProvider().get("ui", "url_for_token")
+        token = UserProvider().get("user", "token")
 
         if browser_name == "chrome":
             browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -45,6 +47,12 @@ def browser():
 
         browser.implicitly_wait(timeout)
         browser.maximize_window()
+
+        browser.get(base_url)
+
+        browser.add_cookie({'name': 'token', 'value': token})
+            
+        browser.get(url_for_token)    
 
         yield browser
 
@@ -58,20 +66,10 @@ def api_client_for_ui() -> ApiForUI:
         return ApiForUI(
             ConfigProvider().get_api_url(),
             UserProvider().get_user_token())
-    
+ 
 
 @pytest.fixture
-def auth_for_ui(browser):
-    email = UserProvider().get("user", "email")
-    password = UserProvider().get("user", "password")
-
-    auth_page = AuthPage(browser)
-    auth_page.go()
-    auth_page.login_as(email, password)
-    
-
-@pytest.fixture
-def for_delete_board(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
+def for_delete_board(browser, test_data: dict, api_client_for_ui: ApiForUI):
     board_name = test_data.get("board_name")
     api_client_for_ui.create_board(board_name)
 
@@ -79,7 +77,7 @@ def for_delete_board(browser, auth_for_ui, test_data: dict, api_client_for_ui: A
 
 
 @pytest.fixture
-def for_create_board(auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
+def for_create_board(test_data: dict, api_client_for_ui: ApiForUI):
     org_id =test_data.get("org_id")
     board_name = test_data.get("board_name")
 
@@ -95,7 +93,7 @@ def for_create_board(auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
 
 
 @pytest.fixture
-def dummy_board_for_ui(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
+def dummy_board_for_ui(browser, test_data: dict, api_client_for_ui: ApiForUI):
     board_name = test_data.get("board_name")
     list_name = test_data.get("list_names")[0]
 
@@ -132,7 +130,7 @@ def card_to_delete(browser, dummy_board_for_ui: str, test_data: dict):
     list_page.create_card(card_name)
 
 @pytest.fixture
-def dummy_board_for_moving(browser, auth_for_ui, test_data: dict, api_client_for_ui: ApiForUI):
+def dummy_board_for_moving(browser, test_data: dict, api_client_for_ui: ApiForUI): 
     board_name = test_data.get("board_name")
     list_names = test_data.get("list_names")
     card_name = test_data.get("card_name")
